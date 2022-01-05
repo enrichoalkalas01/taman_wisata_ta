@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class taman_wisata extends Controller
 {
     public function index() {
-        return view('wisata/detail');
+        return view('wisata/index');
     }
 
     public function detail() {

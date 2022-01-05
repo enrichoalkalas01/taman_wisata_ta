@@ -57,13 +57,17 @@
     </div>
 
     <div id="content-wisata">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h2>Rekomendasi tempat wisata</h2>
-            </div>
-        </div>
         <div class="album py-5 bg-light">
             <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 text-center mb-4">
+                    <h2>Rekomendasi tempat wisata</h2>
+                </div>
+                <div class="col-md-12 text-center mb-4">
+                    <input placeholder="search your destination here..." />
+                    <button>Search</button>
+                </div>
+            </div>
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 @for($i = 0; $i < 6; $i++)

@@ -88,12 +88,17 @@
             margin: 0;
             display: grid;
             /* grid-template-rows: 50%; */
-            grid-template-columns: 50%;
+            grid-template-columns: 1fr 1fr;
             /* grid-auto-rows: 50%; */
         }
 
         #fasilitas-wisata ul li {
             
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
         }
     </style>
     <div id="banner">
@@ -131,36 +136,89 @@
         </div>
         <div class="row" id="wrapper-desc">
             <div class="col-sm-12 col-md-6 left-box">
-                Tester
+                <h4>Description : </h4>
+                <div>
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </div>
             </div> 
             <div class="col-sm-12 col-md-6 right-box">
                 <div class="row wrapper-rb">
-                    <div class="col-md-6" id="fasilitas-wisata">
+                    <div class="col-md-12" id="fasilitas-wisata">
                         <h4>Fasilitas</h4>
                         <ul>
                             <li>
-                                <span>()</span>
+                                <span>
+                                    <i class="fas fa-home"></i>
+                                </span>
                                 <span>WIFI</span>
                             </li>
                             <li>
-                                <span>()</span>
+                                <span>
+                                    <i class="fas fa-wifi"></i>
+                                </span>
                                 <span>WIFI</span>
                             </li>
                             <li>
-                                <span>()</span>
+                                <span>
+                                    <i class="fas fa-restroom"></i>
+                                </span>
                                 <span>WIFI</span>
                             </li>
                             <li>
-                                <span>()</span>
+                                <span>
+                                    <i class="fas fa-shopping-cart"></i>
+                                </span>
                                 <span>WIFI</span>
                             </li>
                         </ul>
                         
                     </div>
-                    <div class="col-md-6" id="lokasi-wisata">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.9807831871963!2d109.41164882963571!3d-7.773254635826434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6531a391120f65%3A0x5a377b098ce34660!2sPantai%20Menganti%20Kebumen!5e0!3m2!1sid!2sid!4v1641389825587!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="col-md-12" id="lokasi-wisata">
+                        <iframe style="width: 100%;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.9807831871963!2d109.41164882963571!3d-7.773254635826434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6531a391120f65%3A0x5a377b098ce34660!2sPantai%20Menganti%20Kebumen!5e0!3m2!1sid!2sid!4v1641389825587!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="comment" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Comment here : </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <textarea></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h5>List Comment : </h5>
+            </div>
+            <div class="col-md-12">
+                @for($i = 0; $i < 5; $i++)
+                    <div class="row wrapper-chat-persons" style="margin: 20px 0; padding: 10px 25px;">
+                        <div class="col-md-12 persons-box" style="display: flex;">
+                            <div style="
+                                width: 75px;
+                                height: 75px;
+                                background-color: #dedede;
+                            "></div>
+                            <div>
+                                <div>
+                                    <h5>Jawir Anak Betawi {{ $i }}</h5>
+                                </div>
+                                <div>
+                                    <h6>Asal Depok</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 comment-box">
+                            It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',
+                        </div>
+                    </div>
+                @endfor
             </div>
         </div>
     </div>
