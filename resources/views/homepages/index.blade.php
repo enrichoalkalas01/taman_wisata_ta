@@ -11,6 +11,8 @@
             background-size: 100%;
             height: 500px;
             box-shadow: 3px 0px 10px rgba(25,25,25, .5);
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         #banner .jumbotron .container-fluid {

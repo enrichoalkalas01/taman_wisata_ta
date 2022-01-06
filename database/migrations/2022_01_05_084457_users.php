@@ -13,11 +13,12 @@ class Users extends Migration
      */
     public function up()
     {
-        Schema::create("users", function(Bluepring $table) {
+        Schema::create("users", function(Blueprint $table) {
             $table->increments('id');
-            $table->string('username');
-            $table->string('password');
-            $table->string('email');
+            $table->string('username')->nullable();
+            $table->string('password')->nullable();
+            $table->string('email')->nullable();
+            $table->timestamps();
         });
     }
 

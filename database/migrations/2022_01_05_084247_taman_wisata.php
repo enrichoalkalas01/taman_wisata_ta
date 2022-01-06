@@ -15,10 +15,11 @@ class TamanWisata extends Migration
     {
         Schema::create('taman_wisata', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
-            $table->string('rating');
-            $table->string('simple_location');
-            $table->string('excerpt');
+            $table->string('title')->nullable();
+            $table->string('rating')->nullable();
+            $table->string('simple_location')->nullable();
+            $table->string('excerpt')->nullable();
+            $table->string('timestamps');
         });
     }
 

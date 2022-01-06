@@ -15,9 +15,10 @@ class Profile extends Migration
     {
         Schema::create('profile', function(Blueprint $table) {
             $table->increments('id');
-            $table->integer('users_id');
-            $table->string('description');
-            $table->string('fullname');
+            $table->integer('users_id')->nullable();
+            $table->string('description')->nullable();
+            $table->string('fullname')->nullable();
+            $table->timestamps();
         });
     }
 
