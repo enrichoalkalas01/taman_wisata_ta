@@ -5,6 +5,7 @@ use App\Http\Controllers\homepages;
 use App\Http\Controllers\taman_wisata;
 use App\Http\Controllers\users;
 use App\Http\Controllers\dashboard;
+use App\Http\Controllers\comment;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,7 +35,16 @@ Route::get('/logout', [users::class, 'logout']);
 Route::get('/register', [users::class, 'register']);
 Route::post('/register', [users::class, 'registerPost']);
 Route::post('/login', [users::class, 'loginPost']);
+Route::get('/dashboard/profile', [users::class, 'profile']);
+Route::get('/dashboard/profile/edit/{id}', [users::class, 'edit']);
+Route::post('/dashboard/profile/editPost', [users::class, 'editPost']);
 
 // Dashboard
 Route::get('/dashboard', [dashboard::class, 'index']);
 Route::get('/dashboard/taman-wisata', [dashboard::class, 'tamanWisata']);
+Route::get('/dashboard/taman-wisata/create', [dashboard::class, 'tamanWisataCreate']);
+Route::post('/dashboard/taman-wisata/create', [dashboard::class, 'tamanWisataCreatePost']);
+Route::get('/dashboard/taman-wisata/delete/{id}', [dashboard::class, 'tamanWisataDelete']);
+
+// Comments
+Route::post('/comments/{id}', [comment::class, 'create']);

@@ -17,6 +17,7 @@ class Images extends Migration
             $table->increments('id');
             $table->string('name_image')->nullable();
             $table->string('type_table')->nullable();
+            $table->string('type')->nullable();
             $table->integer('relation_id')->nullable();
             $table->timestamps();
         });

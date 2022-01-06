@@ -36,6 +36,9 @@
         .bg-image-thumb {
             height: 225px;
             background-color: rgb(85, 89, 92);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
 
         a {
@@ -68,31 +71,36 @@
             <div class="container-fluid">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                @for($i = 0; $i < 6; $i++)
+                @for($i = 0; $i < count($data_taman); $i++)
                     <div class="col">
-                        <a href="/tempat-wisata/detail/{{ $i }}">
+                        <a href="/tempat-wisata/detail/{{ $data_taman[$i]->id }}">
                             <div class="card shadow-sm">
                                 <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                     <title>Placeholder</title>
                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                     <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
                                 </svg> -->
-                                <div class="bd-placeholder-img card-img-top bg-image-thumb">
-                                    
-                                </div>
+                                @if( $data_taman[$i]->thumbnail == NULL )
+                                    <div class="bd-placeholder-img card-img-top bg-image-thumb"></div>
+                                @else
+                                    <div class="bd-placeholder-img card-img-top bg-image-thumb"
+                                        style="background-image: url('{{ asset('storage/images/' . $data_taman[$i]->thumbnail) }}')"
+                                    ></div>
+                                @endif
                                 <div class="card-body">
                                     <div class="card-text">
-                                        <h4>Title Here..</h4>
+                                        <h4>{{ $data_taman[$i]->title }}</h4>
                                     </div>
                                     <p class="card-text">
-                                        This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+                                        {{ $data_taman[$i]->excerpt }}
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">{{ $data_taman[$i]->simple_location }}</small>
                                             <!-- <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                             <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                             </div> -->
-                                        <small class="text-muted">9 mins</small>
+                                        <small class="text-muted">{{ $data_taman[$i]->created_at }}</small>
                                     </div>
                                 </div>
                             </div>

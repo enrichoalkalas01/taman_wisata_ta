@@ -11,6 +11,7 @@
             background-size: 100%;
             height: 500px;
             box-shadow: 3px 0px 10px rgba(25,25,25, .5);
+            padding: 0;
         }
 
         #banner .jumbotron .container-fluid {
@@ -100,125 +101,168 @@
             width: 100%;
             height: 150px;
         }
+
+        iframe {
+            width: 100%;
+        }
+
+        .image-box-comment {
+            width: 75px;
+            height: 75px;
+            background-color: #dedede;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 5px;
+        }
+        
+        #content-slider, #description {
+            padding: 0 2.5%;
+        }
+
+        #content-slider .card-body {
+            padding: 2.5% 5%;
+        }
     </style>
     <div id="banner">
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid"
+            style="background-image: url('{{ asset('storage/images/' . $data_detail->thumbnail) }}')"
+        >
             <div class="container-fluid">
                 <div class="wrapper-box">
-                    <h2>Welcome to our website</h2>
-                    <p>This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+                    <h2>{{ $data_detail->title }}</h2>
+                    <p>{{ $data_detail->excerpt }}</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="content" class="container-fluid">
+    <div id="content-slider" class="container-fluid">
         <!-- <div class="row">
             <div class="col-md-12 p-3 text-center">
                 <h2>Rekomendasi tempat wisata</h2>
             </div>
         </div> -->
-        <div class="row" style="padding: 2.5% 5%;">
-            <div id="slider-detail" class="col-md-12">
-                <div class="image-box">
-                    <div class="image-bg" style="background-image: url('https://anekatempatwisata.com/wp-content/uploads/2014/10/Raja-Ampat.jpg')"></div>
-                </div>
-                <div class="image-box">
-                    <div class="image-bg" style="background-image: url('https://ecs7.tokopedia.net/blog-tokopedia-com/uploads/2018/11/candi-borobudur.jpg')"></div>
-                </div>
-                <div class="image-box">
-                    <div class="image-bg" style="background-image: url('https://cdn.idntimes.com/content-images/post/20210602/padar-2e097c2b4aa2ea93fe57634a9c51a46d_600x400.jpg')"></div>
-                </div>
-                <div class="image-box">
-                    <div class="image-bg" style="background-image: url('https://www.harapanrakyat.com/wp-content/uploads/2019/11/tempat-wisata-di-Indonesia.jpg')"></div>
-                </div>
+        <div class="row card shadow mb-4 slider-box">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-center">Preview Images</h6>
             </div>
-        </div>
-        <div class="row" id="wrapper-desc">
-            <div class="col-sm-12 col-md-6 left-box">
-                <h4>Description : </h4>
-                <div>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </div>
-            </div> 
-            <div class="col-sm-12 col-md-6 right-box">
-                <div class="row wrapper-rb">
-                    <div class="col-md-12" id="fasilitas-wisata">
-                        <h4>Fasilitas</h4>
-                        <ul>
-                            <li>
-                                <span>
-                                    <i class="fas fa-home"></i>
-                                </span>
-                                <span>WIFI</span>
-                            </li>
-                            <li>
-                                <span>
-                                    <i class="fas fa-wifi"></i>
-                                </span>
-                                <span>WIFI</span>
-                            </li>
-                            <li>
-                                <span>
-                                    <i class="fas fa-restroom"></i>
-                                </span>
-                                <span>WIFI</span>
-                            </li>
-                            <li>
-                                <span>
-                                    <i class="fas fa-shopping-cart"></i>
-                                </span>
-                                <span>WIFI</span>
-                            </li>
-                        </ul>
-                        
+            <div class="card-body">
+                @if(count($data_images) == 0)
+                    no images preview
+                @else
+                    <div id="slider-detail" class="col-md-12">
+                        <div class="image-box">
+                            <div class="image-bg" style="background-image: url('{{ asset('storage/images/' . $data_detail->thumbnail) }}')"></div>
+                        </div>
+                    @foreach($data_images as $images)
+                        @if($images->type != 'imageslink')
+                            <div class="image-box">
+                                <div class="image-bg" style="background-image: url('{{ asset('storage/images/' . $images->name_image) }}')"></div>
+                            </div>
+                        @else
+                            <div class="image-box">
+                                <div class="image-bg" style="background-image: url('{{ $images->name_image }}')"></div>
+                            </div>
+                        @endif
+                    @endforeach
                     </div>
-                    <div class="col-md-12" id="lokasi-wisata">
-                        <iframe style="width: 100%;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.9807831871963!2d109.41164882963571!3d-7.773254635826434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6531a391120f65%3A0x5a377b098ce34660!2sPantai%20Menganti%20Kebumen!5e0!3m2!1sid!2sid!4v1641389825587!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                </div>
+                @endif
             </div>
         </div>
     </div>
 
-    <div id="comment" class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h2>Comment here : </h2>
+    <section id="description" class="container-fluid">
+        <div class="row card bg-light text-black shadow">
+            <div class="card-body col-md-12">
+                <h4>Description : </h4>
+                <div class="text-black-50 small">
+                {{ $data_detail->description }}
+                </div>
+            </div>
+
+            <div class="card-body col-md-12">
+                <h4>Fasilitas</h4>
+                <div class="text-black-50 small" id="fasilitas-wisata">
+                    <ul>
+                        <li>
+                            <span>
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <span>WIFI</span>
+                        </li>
+                        <li>
+                            <span>
+                                <i class="fas fa-wifi"></i>
+                            </span>
+                            <span>WIFI</span>
+                        </li>
+                        <li>
+                            <span>
+                                <i class="fas fa-restroom"></i>
+                            </span>
+                            <span>WIFI</span>
+                        </li>
+                        <li>
+                            <span>
+                                <i class="fas fa-shopping-cart"></i>
+                            </span>
+                            <span>WIFI</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card-body col-md-12">
+                <h4 class="ml-2">Lokasi : </h4>
+                <div class="col-md-12" id="lokasi-wisata">
+                    {!! htmlspecialchars_decode($data_detail->maps) !!}
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea></textarea>
+    </section>
+
+    <div id="comment" class="container-fluid" style="padding: 2.5%;">
+        <div class="row card shadow mb-4">
+            <div class="card-header py-3 col-md-12">
+                <h6 class="m-0 font-weight-bold text-primary"><h3>Comment here : </h3></h6>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5>List Comment : </h5>
-            </div>
-            <div class="col-md-12">
-                @for($i = 0; $i < 5; $i++)
-                    <div class="row wrapper-chat-persons" style="margin: 20px 0; padding: 10px 25px;">
-                        <div class="col-md-12 persons-box" style="display: flex;">
-                            <div style="
-                                width: 75px;
-                                height: 75px;
-                                background-color: #dedede;
-                            "></div>
-                            <div>
-                                <div>
-                                    <h5>Jawir Anak Betawi {{ $i }}</h5>
+            <div class="card-body col-md-12">
+                <!-- Add Comments Here -->
+                <form class="row" action="/comments/{{ $data_detail->id }}" method="post">
+                    @csrf
+                    <input name="users_id" value="{{ Session::get('users')->id }}" style="display: none;" />
+                    <input name="taman_wisata_id" value="{{ $data_detail->id }}" style="display: none;" />
+                    <div class="form-group">
+                        <textarea type="text" name="comment" class="form-control" id="comment" placeholder="input your comment here.."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" type="submit" id="button-comment">Submit Comment</button>
+                    </div>
+                </form>
+
+                <!-- List Comments Here -->
+                <div class="col-md-12 wrapper-list-comment" style="padding: 1.5% 2.5% 3.5%;">
+                    <div class="title mb-3">
+                        <h5>List Comment : </h5>
+                    </div>
+                    @for($i = 0; $i < count($data_comment); $i++)
+                        <div class="card mb-4 py-3 border-left-info">
+                            <div class="card-body">
+                                <div class="col-md-12 persons-box mb-3" style="display: flex;">
+                                    <div class="image-box-comment mr-3" style="background-image: url('{{ asset('storage/profile/' . $data_comment[$i]->images_profile) }}')"></div>
+                                    <div class="profile-box">
+                                        <h5>{{ $data_comment[$i]->username }}</h5>
+                                        <small>{{ $data_comment[$i]->location }}</small>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h6>Asal Depok</h6>
+                                <div class="col-md-12 comment-box">
+                                    {{ $data_comment[$i]->comment }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 comment-box">
-                            It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',
-                        </div>
-                    </div>
-                @endfor
+                    @endfor
+                </div>
             </div>
         </div>
     </div>

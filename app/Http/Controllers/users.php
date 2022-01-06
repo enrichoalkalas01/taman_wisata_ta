@@ -64,4 +64,56 @@ class users extends Controller
             return redirect('/');
         }
     }
+
+    public function profile() {
+        return view('users/profile');
+    }
+
+    public function edit(Request $request, $id) {
+        $UserData = User::where('id', $id)->get()->first();
+        return view('users/edit', [
+            'user_data' => $UserData,
+        ]);
+    }
+
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function editPost(Request $request) {
+        $model = User::where('id', $_POST['user_id'])->first();
+        $modelProfile = profile::where('users_id', $_POST['user_id'])->first();
+        if ( $request->images_profile ) {
+            $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->images_profile->getClientOriginalExtension();
+            $model->email = $_POST['email'];
+            $modelProfile->fullname = $_POST['fullname'];
+            $modelProfile->images_profile = $newNameThumbnail;
+            $modelProfile->description = $_POST['description'];
+            $modelProfile->location = $_POST['location'];
+            $request->images_profile->storeAs('public/profile', $newNameThumbnail);
+        } else {
+            $model->email = $_POST['email'];
+            $modelProfile->fullname = $_POST['fullname'];
+            $modelProfile->images_profile = $_POST['image_default'] !== '' ? $_POST['image_default'] : null;
+            $modelProfile->description = $_POST['description'];
+            $modelProfile->location = $_POST['location'];
+        }
+
+        if ( $model->save() && $modelProfile->save() ) {
+            $request->session()->forget('users');
+            $request->session()->forget('profile');
+            $request->session()->put('users', User::where('id', $_POST['user_id'])->get()->first());
+            $request->session()->put('profile', profile::where('users_id', $_POST['user_id'])->get()->first());
+            
+            return redirect('/dashboard/profile');
+        } else {
+            return redirect('/dashboard/profile/edit/' . $_POST['user_id']);
+        }
+    }
 }

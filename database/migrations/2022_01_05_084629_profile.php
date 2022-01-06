@@ -18,6 +18,8 @@ class Profile extends Migration
             $table->integer('users_id')->nullable();
             $table->string('description')->nullable();
             $table->string('fullname')->nullable();
+            $table->string('images_profile')->nullable();
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }

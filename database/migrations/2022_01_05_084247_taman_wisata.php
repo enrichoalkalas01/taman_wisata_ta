@@ -15,11 +15,15 @@ class TamanWisata extends Migration
     {
         Schema::create('taman_wisata', function(Blueprint $table) {
             $table->increments('id');
+            $table->integer('users_id')->nullable();
             $table->string('title')->nullable();
-            $table->string('rating')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->string('simple_location')->nullable();
             $table->string('excerpt')->nullable();
-            $table->string('timestamps');
+            $table->string('rating')->nullable();
+            $table->text('description')->nullable();
+            $table->text('maps')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +34,6 @@ class TamanWisata extends Migration
      */
     public function down()
     {
-        Schema:drop('taman_wisata');
+        Schema::drop('taman_wisata');
     }
 }

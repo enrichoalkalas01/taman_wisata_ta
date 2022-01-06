@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class taman_wisata extends Model
 {
     use HasFactory;
+
+    protected $table = 'taman_wisata';
+
+    protected $fillable = [
+        'users_id',
+        'title',
+        'rating',
+        'thumbnail',
+        'simple_location',
+        'excerpt',
+        'description',
+        'maps'
+    ];
 }

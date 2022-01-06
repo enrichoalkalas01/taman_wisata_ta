@@ -5,15 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class images extends Model
+class comments extends Model
 {
     use HasFactory;
 
-    protected $table = 'images';
+    protected $table = 'comment';
 
     protected $fillable = [
-        'name_image',
-        'type_table',
-        'relation_id',
+        'users_id',
+        'comment',
+        'like',
+        'comment_id',
+        'taman_wisata_id'
     ];
+
 }

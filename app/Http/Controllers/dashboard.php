@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 
+use App\Models\images;
+use App\Models\taman_wisata;
+
 class dashboard extends Controller
 {
     public function __construct() {
@@ -19,6 +22,165 @@ class dashboard extends Controller
     }
 
     public function tamanWisata(Request $request) {
-        return view('dashboard/taman_wisata');
+        $DataTamanWisata = taman_wisata::where('users_id', Session::get('users')->id)->get();
+        return view('dashboard/taman_wisata', [
+            'data_taman' => $DataTamanWisata,
+        ]);
+    }
+
+    public function tamanWisataCreate(Request $request) {
+        return view('dashboard/taman_wisata_create');
+    }
+
+    public function tamanWisataCreatePost(Request $request) {
+        $UserId = Session::get('users')->id;
+        $status_images = false;
+        $status_images_link = false;
+
+        // Checking The Images Status
+        foreach($_POST as $key => $value) {
+            if ( $key == 'imageslink') {
+                $status_images_link = true;
+            } 
+            
+            if ( $key == 'images' ) {
+                $status_images = true;
+            }
+        }
+
+        if($request->images) {
+            $status_images = true;
+        }
+        
+        if($request->imageslink) {
+            $status_images_link = true;
+        }
+        
+        $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+
+        if ( $request->thumbnail ) {
+            $model = new taman_wisata;
+            $model->users_id = $UserId;
+            $model->title = $_POST["title"];
+            $model->thumbnail = $newNameThumbnail;
+            $model->rating = null;
+            $model->simple_location = $_POST["simple_location"];
+            $model->excerpt = $_POST["excerpt"];
+            $model->description = $_POST["description"];
+            $model->maps = $_POST["maps"];
+        } else {
+            $model = new taman_wisata;
+            $model->users_id = $UserId;
+            $model->title = $_POST["title"];
+            $model->thumbnail = null;
+            $model->rating = null;
+            $model->simple_location = $_POST["simple_location"];
+            $model->excerpt = $_POST["excerpt"];
+            $model->description = $_POST["description"];
+            $model->maps = $_POST["maps"];
+        }
+
+        $request->thumbnail->storeAs('public/images', $newNameThumbnail);
+
+        if ( !$status_images && !$status_images_link ) {
+            if ( $model->save() ) {
+                return redirect('/dashboard/taman-wisata');
+            } else {
+                return redirect('/dashboard/taman-wisata/create');
+            }
+        } else { 
+            if ( $status_images && !$status_images_link ) {
+                if ( $model->save() ) {
+                    $counted = 0;
+                    for( $i = 0; $i < count($request->images); $i++ ) {
+                        $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+                        $model_images = new images;
+                        $model_images->name_image = $newNameArr;
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $request->images[$i]->storeAs('public/images', $newNameArr);
+                        $counted += 1; 
+                    }
+                    
+                    if ( $counted == count($request->images) ) {
+                        return redirect('/dashboard/taman-wisata');
+                    }
+                } else {
+                    return redirect('/dashboard/taman-wisata/create');
+                }
+            } else if ( $status_images_link && !$status_images ){
+                if ( $model->save() ) {
+                    $counted = 0;
+                    for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $request->imageslink[$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'imageslink';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $counted += 1; 
+                    }
+                    
+                    if ( $counted == count($request->imageslink) ) {
+                        return redirect('/dashboard/taman-wisata');
+                    }
+                } else {
+                    return redirect('/dashboard/taman-wisata/create');
+                }
+            } else {
+                if ( $model->save() ) {
+                    $counted = 0;
+                    for( $i = 0; $i < count($request->images); $i++ ) {
+                        $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+                        $model_images = new images;
+                        $model_images->name_image = $newNameArr;
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $request->images[$i]->storeAs('public/images', $newNameArr);
+                        $counted += 1; 
+                    }
+
+                    for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $request->imageslink[$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'imageslink';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $counted += 1; 
+                    }
+                    
+                    if ( $counted == ( count($request->images) + count($request->imageslink) ) ) {
+                        return redirect('/dashboard/taman-wisata');
+                    }
+                } else {
+                    return redirect('/dashboard/taman-wisata/create');
+                }
+            }
+        }
+    }
+
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function tamanWisataDelete(Request $request, $id) {
+        taman_wisata::find($id)->delete();
+        $dataImages = images::where('relation_id', $id)->where('type', 'images')->where('type_table', 'taman_wisata')->get();
+        for($i = 0; $i < count($dataImages); $i++) {
+            $dataImages[$i]->delete();
+        }
+
+        return redirect('/dashboard/taman-wisata');
     }
 }

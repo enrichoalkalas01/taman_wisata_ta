@@ -11,6 +11,8 @@
             background-size: 100%;
             height: 500px;
             box-shadow: 3px 0px 10px rgba(25,25,25, .5);
+            padding-top: 0;
+            padding-bottom: 0;
         }
 
         #banner .jumbotron .container-fluid {
@@ -34,6 +36,9 @@
         .bg-image-thumb {
             height: 225px;
             background-color: rgb(85, 89, 92);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
         }
 
         a {
@@ -44,9 +49,20 @@
         a:hover {
             color: unset;
         }
+
+        .links-page {
+            padding: 2.5% 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .links-page nav {
+            width: auto;
+        }
     </style>
     <div id="banner">
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid" style="margin: 0;">
             <div class="container-fluid">
                 <div class="wrapper-box">
                     <h1 class="display-4">Welcome to our website</h1>
@@ -59,49 +75,64 @@
     <div id="content-wisata">
         <div class="album py-5 bg-light">
             <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12 text-center mb-4">
-                    <h2>Rekomendasi tempat wisata</h2>
-                </div>
-                <div class="col-md-12 text-center mb-4">
-                    <input placeholder="search your destination here..." />
-                    <button>Search</button>
-                </div>
-            </div>
-
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                @for($i = 0; $i < 6; $i++)
-                    <div class="col">
-                        <a href="/tempat-wisata/detail/{{ $i }}">
-                            <div class="card shadow-sm">
-                                <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#55595c"></rect>
-                                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-                                </svg> -->
-                                <div class="bd-placeholder-img card-img-top bg-image-thumb">
-                                    
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-text">
-                                        <h4>Title Here..</h4>
-                                    </div>
-                                    <p class="card-text">
-                                        This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                            <!-- <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                            </div> -->
-                                        <small class="text-muted">9 mins</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h2>Rekomendasi tempat wisata</h2>
                     </div>
-                @endfor
-            </div>
+                </div>
+                <div class="row" style="padding: 2.5% 10%">
+                    <form class="col-md-12 d-flex justify-center d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    @for($i = 0; $i < count($data_taman); $i++)
+                        <div class="col">
+                            <a href="/tempat-wisata/detail/{{ $data_taman[$i]->id }}">
+                                <div class="card shadow-sm">
+                                    <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <title>Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                                        <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                                    </svg> -->
+                                    @if( $data_taman[$i]->thumbnail == NULL )
+                                        <div class="bd-placeholder-img card-img-top bg-image-thumb"></div>
+                                    @else
+                                        <div class="bd-placeholder-img card-img-top bg-image-thumb"
+                                            style="background-image: url('{{ asset('storage/images/' . $data_taman[$i]->thumbnail) }}')"
+                                        ></div>
+                                    @endif
+                                    <div class="card-body">
+                                        <div class="card-text">
+                                            <h4>{{ $data_taman[$i]->title }}</h4>
+                                        </div>
+                                        <p class="card-text">
+                                            {{ $data_taman[$i]->excerpt }}
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">{{ $data_taman[$i]->simple_location }}</small>
+                                                <!-- <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                                </div> -->
+                                            <small class="text-muted">{{ $data_taman[$i]->created_at }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endfor
+                </div>
+                <div class="row links-page">
+                    {{ $data_taman->links() }}
+                </div>
             </div>
         </div>
     </div>
