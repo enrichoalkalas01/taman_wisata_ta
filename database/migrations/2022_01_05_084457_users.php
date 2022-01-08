@@ -18,6 +18,7 @@ class Users extends Migration
             $table->string('username')->nullable();
             $table->string('password')->nullable();
             $table->string('email')->nullable();
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

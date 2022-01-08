@@ -37,7 +37,6 @@
     <!-- Page level plugins -->
     <script src="{{ asset('template/sb-admin/vendor/chart.js/Chart.min.js') }}"></script>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-
     <!-- Page level custom scripts -->
     <!-- <script src="{{ asset('template/sb-admin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('template/sb-admin/js/demo/chart-pie-demo.js') }}"></script> -->
@@ -56,7 +55,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup> Admin</div>
+                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
             </a>
 
             <!-- Divider -->

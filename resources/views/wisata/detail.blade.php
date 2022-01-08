@@ -214,8 +214,14 @@
             </div>
             
             <div class="card-body col-md-12">
-                <h4 class="ml-2">Lokasi : </h4>
-                <div class="col-md-12" id="lokasi-wisata">
+                <div class="col-md-12">
+                    <h4 class="">Lokasi : </h4>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <small>Latitude ( {{ $data_detail->latitude }} )</small>
+                    <small>Longitude ( {{ $data_detail->longitude }} )</small>
+                </div>
+                <div class="col-md-12 mb-3" id="lokasi-wisata">
                     {!! htmlspecialchars_decode($data_detail->maps) !!}
                 </div>
             </div>

@@ -20,6 +20,8 @@ class TamanWisata extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('simple_location')->nullable();
             $table->string('excerpt')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
             $table->string('rating')->nullable();
             $table->text('description')->nullable();
             $table->text('maps')->nullable();

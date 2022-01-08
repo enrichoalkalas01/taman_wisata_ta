@@ -62,6 +62,18 @@
                         </div>
                         <div class="form-group">
                             <div class="mb-3">
+                                <label for="latitude" class="form-label">latitude</label>
+                                <input type="text" name="latitude" class="form-control" id="latitude" placeholder="input your latitude here..">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="longitude" class="form-label">longitude</label>
+                                <input type="text" name="longitude" class="form-control" id="longitude" placeholder="input your longitude here..">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
                                 <label for="thumbnail" class="form-label">thumbnail</label>
                                 <input type="file" name="thumbnail" class="form-control" id="thumbnail" placeholder="input your thumbnail here..">
                             </div>

@@ -5,20 +5,37 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
+use App\Http\Controllers\users;
+use Stevebauman\Location\Facades\Location;
 
 use App\Models\images;
 use App\Models\taman_wisata;
 
 class dashboard extends Controller
 {
-    public function __construct() {
+    public function AuthCheck() {
         if ( Session::get('users') == NULL ) {
             return redirect('/login');
+        } else {
+            if ( Session::get('users')->type != 'admin' ) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
     public function index(Request $request) {
-        return view('dashboard/index');
+        $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
+        var_dump($query);
+        echo "<br>";
+        echo $query["lat"];
+        
+        // if ( $this->AuthCheck() ) {
+        //     return view('dashboard/index');
+        // } else {
+        //     return view('dashboard/admin/index');
+        // }
     }
 
     public function tamanWisata(Request $request) {
@@ -56,7 +73,9 @@ class dashboard extends Controller
             $status_images_link = true;
         }
         
-        $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+        if ( $request->thumbnail ) {
+            $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+        }
 
         if ( $request->thumbnail ) {
             $model = new taman_wisata;
@@ -66,6 +85,8 @@ class dashboard extends Controller
             $model->rating = null;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
+            $model->latitude = $_POST["latitude"];
+            $model->longitude = $_POST["longitude"];
             $model->description = $_POST["description"];
             $model->maps = $_POST["maps"];
         } else {
@@ -76,11 +97,15 @@ class dashboard extends Controller
             $model->rating = null;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
+            $model->latitude = $_POST["latitude"];
+            $model->longitude = $_POST["longitude"];
             $model->description = $_POST["description"];
             $model->maps = $_POST["maps"];
         }
 
-        $request->thumbnail->storeAs('public/images', $newNameThumbnail);
+        if ( $request->thumbnail ) {
+            $request->thumbnail->storeAs('public/images', $newNameThumbnail);
+        }
 
         if ( !$status_images && !$status_images_link ) {
             if ( $model->save() ) {
@@ -164,16 +189,6 @@ class dashboard extends Controller
         }
     }
 
-    public function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
-
     public function tamanWisataDelete(Request $request, $id) {
         taman_wisata::find($id)->delete();
         $dataImages = images::where('relation_id', $id)->where('type', 'images')->where('type_table', 'taman_wisata')->get();
@@ -182,5 +197,15 @@ class dashboard extends Controller
         }
 
         return redirect('/dashboard/taman-wisata');
+    }
+
+    public function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }
