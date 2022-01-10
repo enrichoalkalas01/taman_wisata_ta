@@ -16,10 +16,10 @@ use App\Models\fasilitas;
 class dashboard extends Controller
 {
     public function index(Request $request) {
-        $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
-        var_dump($query);
-        echo "<br>";
-        echo $query["lat"];
+        // $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
+        // var_dump($query);
+        // echo "<br>";
+        // echo $query["lat"];
         $DataUser = Session::get('users');
         if ( $DataUser != NULL ) {
             if ( $DataUser->first()['type'] != 'admin' ) {
