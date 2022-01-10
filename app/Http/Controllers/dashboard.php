@@ -7,35 +7,29 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\users;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\images;
 use App\Models\taman_wisata;
+use App\Models\fasilitas;
 
 class dashboard extends Controller
 {
-    public function AuthCheck() {
-        if ( Session::get('users') == NULL ) {
-            return redirect('/login');
-        } else {
-            if ( Session::get('users')->type != 'admin' ) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
     public function index(Request $request) {
-        $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
-        var_dump($query);
-        echo "<br>";
-        echo $query["lat"];
-        
-        // if ( $this->AuthCheck() ) {
-        //     return view('dashboard/index');
-        // } else {
-        //     return view('dashboard/admin/index');
-        // }
+        // $query = @unserialize (file_get_contents('http://ip-api.com/php/'));
+        // var_dump($query);
+        // echo "<br>";
+        // echo $query["lat"];
+        $DataUser = Session::get('users');
+        if ( $DataUser != NULL ) {
+            if ( $DataUser->first()['type'] != 'admin' ) {
+                return view('dashboard/index');
+            } else {
+                return view('dashboard/admin/index');
+            }
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function tamanWisata(Request $request) {
@@ -46,7 +40,16 @@ class dashboard extends Controller
     }
 
     public function tamanWisataCreate(Request $request) {
-        return view('dashboard/taman_wisata_create');
+        $DataUser = Session::get('users');
+        if ( $DataUser != NULL ) {
+            if ( $DataUser->first()['type'] == 'admin' ) {
+                return view('dashboard/admin/taman_wisata_create');
+            } else {
+                return redirect('/dashboard');
+            }
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function tamanWisataCreatePost(Request $request) {
@@ -109,6 +112,13 @@ class dashboard extends Controller
 
         if ( !$status_images && !$status_images_link ) {
             if ( $model->save() ) {
+                for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                    $fasilitas = new fasilitas;
+                    $fasilitas->taman_id = $model->id;
+                    $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                    $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                    $fasilitas->save();
+                }
                 return redirect('/dashboard/taman-wisata');
             } else {
                 return redirect('/dashboard/taman-wisata/create');
@@ -116,6 +126,14 @@ class dashboard extends Controller
         } else { 
             if ( $status_images && !$status_images_link ) {
                 if ( $model->save() ) {
+                    for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                        $fasilitas = new fasilitas;
+                        $fasilitas->taman_id = $model->id;
+                        $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                        $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                        $fasilitas->save();
+                    }
+
                     $counted = 0;
                     for( $i = 0; $i < count($request->images); $i++ ) {
                         $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
@@ -137,6 +155,14 @@ class dashboard extends Controller
                 }
             } else if ( $status_images_link && !$status_images ){
                 if ( $model->save() ) {
+                    for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                        $fasilitas = new fasilitas;
+                        $fasilitas->taman_id = $model->id;
+                        $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                        $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                        $fasilitas->save();
+                    }
+
                     $counted = 0;
                     for( $i = 0; $i < count($request->imageslink); $i++ ) {
                         $model_images = new images;
@@ -156,6 +182,14 @@ class dashboard extends Controller
                 }
             } else {
                 if ( $model->save() ) {
+                    for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                        $fasilitas = new fasilitas;
+                        $fasilitas->taman_id = $model->id;
+                        $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                        $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                        $fasilitas->save();
+                    }
+
                     $counted = 0;
                     for( $i = 0; $i < count($request->images); $i++ ) {
                         $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
@@ -197,6 +231,27 @@ class dashboard extends Controller
         }
 
         return redirect('/dashboard/taman-wisata');
+    }
+
+    public function tamanWisataEdit(Request $request, $id) {
+        $DataUser = Session::get('users');
+        if ( $DataUser != NULL ) {
+            if ( $DataUser->first()['type'] == 'admin' ) {
+                $GetData = DB::table('taman_wisata')->where('id', $id)->get()->first();
+                $Fasilitas = DB::table('fasilitas')->where('taman_id', $id)->get();
+                $Images = DB::table('images')->where('type_table', 'taman_wisata')
+                        ->where('relation_id', $id)->get();
+                return view('/dashboard/admin/taman_wisata_edit', [
+                    "data_taman" => $GetData,
+                    "data_fasilitas" => $Fasilitas,
+                    "data_images" => $Images
+                ]);
+            } else {
+                return redirect('/dashboard');
+            }
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function generateRandomString($length = 10) {

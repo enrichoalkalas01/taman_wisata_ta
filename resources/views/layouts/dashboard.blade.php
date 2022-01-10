@@ -82,12 +82,6 @@
                 </a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/dashboard/taman-wisata">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Taman Wisata</span>
-                </a>
-            </li>
-            <li class="nav-item active">
                 <a class="nav-link" href="/dashboard/profile">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Profile</span>

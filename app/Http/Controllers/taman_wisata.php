@@ -37,11 +37,15 @@ class taman_wisata extends Controller
                     ->join('users', 'users.id', '=', 'comment.users_id')
                     ->join('profile', 'profile.users_id', '=', 'comment.users_id')
                     ->get();
+        $DataFasilitas = DB::table('fasilitas')
+                    ->where('taman_id', $id)
+                    ->get();
 
         return view('wisata/detail',[  
             'data_detail' => $DataDetail,
             'data_images' => $DataImages,
-            'data_comment' => $DataComment
+            'data_comment' => $DataComment,
+            'data_fasilitas' => $DataFasilitas
         ]);
     }
 }

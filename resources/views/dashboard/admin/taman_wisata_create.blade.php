@@ -1,4 +1,4 @@
-@extends('layouts/dashboard')
+@extends('layouts/admin/dashboard')
 
 @section('title', 'Dashboard')
 
@@ -9,7 +9,8 @@
             background-color: rgb(85, 89, 92);
         }
 
-        #images-preview .mb-3 {
+        #images-preview .mb-3,
+        #fasilitas-preview .mb-3 {
             display: flex;
         }
 
@@ -85,6 +86,30 @@
                                 </textarea>
                             </div>
                         </div>
+                        <div class="form-group" id="fasilitas-preview">
+                            <div class="form-group">
+                                <button class="btn btn-success" type="button" id="add-fasilitas">Add More Facility + </button>
+                            </div>
+                            <label for="fasilitas" class="form-label">fasilitas</label>
+                            <div class="mb-3">
+                                <select name="fasilitas_icon[]" class="form-control mr-2 col-md-2 col-sm-12">
+                                    <option value="fas fa-home">Icon home</option>
+                                    <option value="fas fa-wifi">Icon wifi</option>
+                                    <option value="fas fa-restroom">Icon toilet</option>
+                                    <option value="fas fa-road">Icon road</option>
+                                    <option value="fas fa-camera">Icon foto</option>
+                                    <option value="fas fa-shopping-cart">Icon market</option>
+                                    <option value="fas fa-running">Icon run</option>
+                                    <option value="fas fa-dumbbell">Icon gym</option>
+                                    <option value="fas fa-volleyball-ball">Icon ball</option>
+                                    <option value="fab fa-simplybuilt">Icon playground</option>
+                                    <option value="fas fa-star-and-crescent">Icon tempat_ibadah</option>
+                                    <option value="fas fa-layer-group">Icon other</option>
+                                </select>
+                                <input type="text" name="fasilitas_text[]" class="form-control" id="fasilitas" placeholder="input your fasilitas here..">
+                                <div class="ml-2 btn btn-danger" id="btn-delete-more">-</div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="mb-3">
                                 <label for="maps" class="form-label">maps <b>( harus berbentuk iframe gmaps )</b> </label>
@@ -129,6 +154,29 @@
             `)
         })
 
+        $('#add-fasilitas').on('click', function() {
+            $('#fasilitas-preview').append(`
+                <div class="mb-3">
+                    <select name="fasilitas_icon[]" class="form-control mr-2 col-md-2 col-sm-12">
+                        <option value="fas fa-home">Icon home</option>
+                        <option value="fas fa-wifi">Icon wifi</option>
+                        <option value="fas fa-restroom">Icon toilet</option>
+                        <option value="fas fa-road">Icon road</option>
+                        <option value="fas fa-camera">Icon foto</option>
+                        <option value="fas fa-shopping-cart">Icon market</option>
+                        <option value="fas fa-running">Icon run</option>
+                        <option value="fas fa-dumbbell">Icon gym</option>
+                        <option value="fas fa-volleyball-ball">Icon ball</option>
+                        <option value="fab fa-simplybuilt">Icon playground</option>
+                        <option value="fas fa-star-and-crescent">Icon tempat_ibadah</option>
+                        <option value="fas fa-layer-group">Icon other</option>
+                    </select>
+                    <input type="text" name="fasilitas_text[]" class="form-control" id="fasilitas" placeholder="input your fasilitas here..">
+                    <div class="ml-2 btn btn-danger" id="btn-delete-more">-</div>
+                </div>
+            `)
+        })
+
         $("#add-images-link").on('click', function() {
             $("#images-preview").append(`
                 <div class="mb-3">
@@ -150,5 +198,17 @@
             $('#maps-show').html(e.target.value)
         })
     </script>
+
+    <!-- <i class="fas fa-volleyball-ball"></i> -->
+    <!-- <i class="fas fa-running"></i> -->
+    <!-- <i class="fas fa-dumbbell"></i> -->
+    <!-- <i class="fas fa-star-and-crescent"></i> -->
+    <!-- <i class="fas fa-pray"></i> -->
+    <!-- <i class="fas fa-praying-hands"></i> -->
+    <!-- <i class="fas fa-shopping-cart"></i> -->
+    <!-- <i class="fas fa-camera"></i> -->
+    <!-- <i class="fas fa-layer-group"></i> -->
+    <!-- <i class="fas fa-road"></i> -->
+    <!-- <i class="fab fa-simplybuilt"></i> -->
 @endsection
     

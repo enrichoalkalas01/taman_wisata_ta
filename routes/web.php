@@ -45,6 +45,7 @@ Route::get('/dashboard/taman-wisata', [dashboard::class, 'tamanWisata']);
 Route::get('/dashboard/taman-wisata/create', [dashboard::class, 'tamanWisataCreate']);
 Route::post('/dashboard/taman-wisata/create', [dashboard::class, 'tamanWisataCreatePost']);
 Route::get('/dashboard/taman-wisata/delete/{id}', [dashboard::class, 'tamanWisataDelete']);
+Route::get('/dashboard/taman-wisata/edit/{id}', [dashboard::class, 'tamanWisataEdit']);
 
 // Comments
 Route::post('/comments/{id}', [comment::class, 'create']);

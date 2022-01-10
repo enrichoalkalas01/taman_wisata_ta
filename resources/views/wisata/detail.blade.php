@@ -185,30 +185,14 @@
                 <h4>Fasilitas</h4>
                 <div class="text-black-50 small" id="fasilitas-wisata">
                     <ul>
+                        @foreach($data_fasilitas as $value)
                         <li>
                             <span>
-                                <i class="fas fa-home"></i>
+                                <i class="{{ $value->name_icon }}"></i>
                             </span>
-                            <span>WIFI</span>
+                            <span>{{ $value->title_fasilitas }}</span>
                         </li>
-                        <li>
-                            <span>
-                                <i class="fas fa-wifi"></i>
-                            </span>
-                            <span>WIFI</span>
-                        </li>
-                        <li>
-                            <span>
-                                <i class="fas fa-restroom"></i>
-                            </span>
-                            <span>WIFI</span>
-                        </li>
-                        <li>
-                            <span>
-                                <i class="fas fa-shopping-cart"></i>
-                            </span>
-                            <span>WIFI</span>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
