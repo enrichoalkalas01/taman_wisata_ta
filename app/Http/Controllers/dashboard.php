@@ -254,6 +254,196 @@ class dashboard extends Controller
         }
     }
 
+    public function tamanWisataEditPost(Request $request, $id) {
+        $UserId = Session::get('users')->id;
+        $status_images = false;
+        $status_images_link = false;
+
+        // Checking The Images Status
+        foreach($_POST as $key => $value) {
+            if ( $key == 'imageslink') {
+                $status_images_link = true;
+            } 
+            
+            if ( $key == 'images' ) {
+                $status_images = true;
+            }
+        }
+
+        var_dump($_POST);
+        echo "<br>";
+        var_dump($request->thumbnail);
+        echo "<br>";
+
+        // $model = new taman_wisata;
+        // $model->title = $_POST["title"];
+        // $model->rating = null;
+        // $model->excerpt = $_POST["excerpt"];
+        // $model->simple_location = $_POST["simple_location"];
+        // $model->latitude = $_POST["latitude"];
+        // $model->longitude = $_POST["longitude"];
+        // $model->description = $_POST["description"];
+        // $model->maps = $_POST["maps"];
+
+        // var_dump($_POST["thumbnail"]);
+        // if ( $request->thumbnail !== NULL ) {
+            
+        // } else {
+        //     $model->thumbnail = 
+        // }
+
+        // if($request->images) {
+        //     $status_images = true;
+        // }
+        
+        // if($request->imageslink) {
+        //     $status_images_link = true;
+        // }
+        
+        // if ( $request->thumbnail ) {
+        //     $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+        // }
+
+        // if ( $request->thumbnail ) {
+        //     $model = new taman_wisata;
+        //     $model->users_id = $UserId;
+        
+        //     $model->thumbnail = $newNameThumbnail;
+        
+        
+        
+        
+        // } else {
+        //     $model = new taman_wisata;
+        //     $model->users_id = $UserId;
+        //     $model->title = $_POST["title"];
+        //     $model->thumbnail = null;
+        //     $model->rating = null;
+        //     $model->simple_location = $_POST["simple_location"];
+        //     $model->excerpt = $_POST["excerpt"];
+        //     $model->latitude = $_POST["latitude"];
+        //     $model->longitude = $_POST["longitude"];
+        //     $model->description = $_POST["description"];
+        //     $model->maps = $_POST["maps"];
+        // }
+
+        // if ( $request->thumbnail ) {
+        //     $request->thumbnail->storeAs('public/images', $newNameThumbnail);
+        // }
+
+        // if ( !$status_images && !$status_images_link ) {
+        //     if ( $model->save() ) {
+        //         for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+        //             $fasilitas = new fasilitas;
+        //             $fasilitas->taman_id = $model->id;
+        //             $fasilitas->name_icon = $request->fasilitas_icon[$i];
+        //             $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+        //             $fasilitas->save();
+        //         }
+        //         return redirect('/dashboard/taman-wisata');
+        //     } else {
+        //         return redirect('/dashboard/taman-wisata/create');
+        //     }
+        // } else { 
+        //     if ( $status_images && !$status_images_link ) {
+        //         if ( $model->save() ) {
+        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+        //                 $fasilitas = new fasilitas;
+        //                 $fasilitas->taman_id = $model->id;
+        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
+        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+        //                 $fasilitas->save();
+        //             }
+
+        //             $counted = 0;
+        //             for( $i = 0; $i < count($request->images); $i++ ) {
+        //                 $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+        //                 $model_images = new images;
+        //                 $model_images->name_image = $newNameArr;
+        //                 $model_images->type_table = 'taman_wisata';
+        //                 $model_images->type = 'images';
+        //                 $model_images->relation_id = $model->id;
+        //                 $model_images->save();
+        //                 $request->images[$i]->storeAs('public/images', $newNameArr);
+        //                 $counted += 1; 
+        //             }
+                    
+        //             if ( $counted == count($request->images) ) {
+        //                 return redirect('/dashboard/taman-wisata');
+        //             }
+        //         } else {
+        //             return redirect('/dashboard/taman-wisata/create');
+        //         }
+        //     } else if ( $status_images_link && !$status_images ){
+        //         if ( $model->save() ) {
+        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+        //                 $fasilitas = new fasilitas;
+        //                 $fasilitas->taman_id = $model->id;
+        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
+        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+        //                 $fasilitas->save();
+        //             }
+
+        //             $counted = 0;
+        //             for( $i = 0; $i < count($request->imageslink); $i++ ) {
+        //                 $model_images = new images;
+        //                 $model_images->name_image = $request->imageslink[$i];
+        //                 $model_images->type_table = 'taman_wisata';
+        //                 $model_images->type = 'imageslink';
+        //                 $model_images->relation_id = $model->id;
+        //                 $model_images->save();
+        //                 $counted += 1; 
+        //             }
+                    
+        //             if ( $counted == count($request->imageslink) ) {
+        //                 return redirect('/dashboard/taman-wisata');
+        //             }
+        //         } else {
+        //             return redirect('/dashboard/taman-wisata/create');
+        //         }
+        //     } else {
+        //         if ( $model->save() ) {
+        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+        //                 $fasilitas = new fasilitas;
+        //                 $fasilitas->taman_id = $model->id;
+        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
+        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+        //                 $fasilitas->save();
+        //             }
+
+        //             $counted = 0;
+        //             for( $i = 0; $i < count($request->images); $i++ ) {
+        //                 $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+        //                 $model_images = new images;
+        //                 $model_images->name_image = $newNameArr;
+        //                 $model_images->type_table = 'taman_wisata';
+        //                 $model_images->type = 'images';
+        //                 $model_images->relation_id = $model->id;
+        //                 $model_images->save();
+        //                 $request->images[$i]->storeAs('public/images', $newNameArr);
+        //                 $counted += 1; 
+        //             }
+
+        //             for( $i = 0; $i < count($request->imageslink); $i++ ) {
+        //                 $model_images = new images;
+        //                 $model_images->name_image = $request->imageslink[$i];
+        //                 $model_images->type_table = 'taman_wisata';
+        //                 $model_images->type = 'imageslink';
+        //                 $model_images->relation_id = $model->id;
+        //                 $model_images->save();
+        //                 $counted += 1; 
+        //             }
+                    
+        //             if ( $counted == ( count($request->images) + count($request->imageslink) ) ) {
+        //                 return redirect('/dashboard/taman-wisata');
+        //             }
+        //         } else {
+        //             return redirect('/dashboard/taman-wisata/create');
+        //         }
+        //     }
+        // }
+    }
+
     public function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
