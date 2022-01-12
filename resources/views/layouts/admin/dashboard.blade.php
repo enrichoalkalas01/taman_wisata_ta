@@ -36,7 +36,7 @@
 
     <!-- Page level plugins -->
     <script src="{{ asset('template/sb-admin/vendor/chart.js/Chart.min.js') }}"></script>
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <!-- <script type="text/javascript" src="http://www.google.com/jsapi"></script> -->
     <!-- Page level custom scripts -->
     <!-- <script src="{{ asset('template/sb-admin/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('template/sb-admin/js/demo/chart-pie-demo.js') }}"></script> -->
