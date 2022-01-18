@@ -92,7 +92,8 @@ class dashboard extends Controller
             $model->users_id = $UserId;
             $model->title = $_POST["title"];
             $model->thumbnail = $newNameThumbnail;
-            $model->rating = null;
+            $model->rating = $_POST['rating'];
+            $model->price = $_POST['price'];
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
             $model->latitude = $_POST["latitude"];

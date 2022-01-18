@@ -21,6 +21,7 @@ class taman_wisata extends Model
         'description',
         'maps',
         'latitude',
-        'longitude'
+        'longitude',
+        'price'
     ];
 }

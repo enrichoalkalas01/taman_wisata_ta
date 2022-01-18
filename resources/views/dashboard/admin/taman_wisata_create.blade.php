@@ -63,6 +63,12 @@
                         </div>
                         <div class="form-group">
                             <div class="mb-3">
+                                <label for="price" class="form-label">price</label>
+                                <input type="number" name="price" class="form-control" id="price" placeholder="input your price here..">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
                                 <label for="latitude" class="form-label">latitude</label>
                                 <input type="text" name="latitude" class="form-control" id="latitude" placeholder="input your latitude here..">
                             </div>
@@ -77,6 +83,20 @@
                             <div class="mb-3">
                                 <label for="thumbnail" class="form-label">thumbnail</label>
                                 <input type="file" name="thumbnail" class="form-control" id="thumbnail" placeholder="input your thumbnail here..">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">rating</label>
+                                <div class="mb-3">
+                                    <select name="rating" class="form-control mr-2 col-md-12 col-sm-12">
+                                        <option value="sangat bagus">sangat bagus</option>
+                                        <option value="bagus">bagus</option>
+                                        <option value="normal">normal</option>
+                                        <option value="tidak bagus">tidak bagus</option>
+                                        <option value="sangat tidak bagus">sangat tidak bagus</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

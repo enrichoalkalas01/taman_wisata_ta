@@ -16,6 +16,7 @@ class TamanWisata extends Migration
         Schema::create('taman_wisata', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('users_id')->nullable();
+            $table->integer('price')->nullable();
             $table->string('title')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('simple_location')->nullable();

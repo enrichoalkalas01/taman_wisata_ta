@@ -193,6 +193,12 @@
             </div>
 
             <div class="card-body col-md-12">
+                <div class="mb-3">
+                    <h4>Rating :</h4> <span style="text-transform: uppercase;">{{ $data_detail->rating }}</span>
+                </div>
+                <div class="mb-3">
+                    <h4>Price :</h4> <span>Rp. {{ $data_detail->price }}</span>
+                </div>
                 <h4>Fasilitas</h4>
                 <div class="text-black-50 small" id="fasilitas-wisata">
                     <ul>
