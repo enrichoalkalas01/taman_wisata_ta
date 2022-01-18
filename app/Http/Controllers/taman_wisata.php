@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class taman_wisata extends Controller
 {
@@ -26,6 +27,7 @@ class taman_wisata extends Controller
     }
 
     public function detail(Request $request, $id) {
+        $UserData = Session::get('users');
         $DataDetail = DB::table('taman_wisata')->where('id', $id)->get()->first();
         $DataImages = DB::table('images')
                     ->where('type_table', 'taman_wisata')
@@ -41,11 +43,17 @@ class taman_wisata extends Controller
                     ->where('taman_id', $id)
                     ->get();
 
+        $DataFavourites = DB::table('favourites')
+                        ->where('taman_id', $id)
+                        ->where('user_id', $UserData->id)
+                        ->get();
+
         return view('wisata/detail',[  
             'data_detail' => $DataDetail,
             'data_images' => $DataImages,
             'data_comment' => $DataComment,
-            'data_fasilitas' => $DataFasilitas
+            'data_fasilitas' => $DataFasilitas,
+            'data_favourites' => $DataFavourites
         ]);
     }
 }

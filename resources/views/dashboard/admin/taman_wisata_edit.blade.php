@@ -43,7 +43,7 @@
                     <div class="card-body" style="width: 100%;">
                     <form class="users" action="/dashboard/admin/taman-wisata/edit" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input name="users_id" value="{{ $data_taman->id }}" style="display: none;" />
+                        <input name="taman_id" value="{{ $data_taman->id }}" style="display: none;" />
                         <div class="form-group">
                             <div class="mb-3">
                                 <label for="title" class="form-label">title</label>
@@ -78,7 +78,7 @@
                             <div class="mb-3">
                                 <label for="thumbnail" class="form-label">thumbnail</label>
                                 <input defaultValue="{{ $data_taman->thumbnail }}" value="{{ $data_taman->thumbnail }}" type="file" name="thumbnail" class="form-control" id="thumbnail" placeholder="input your thumbnail here..">
-                                <small>{{ $data_taman->thumbnail }} | <button class="btn btn-danger mt-2">Delete thumbnail ?</button> </small>
+                                <input name="exist_thumbnail" value="{{ $data_taman->thumbnail }}" style="display: none;" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -152,8 +152,7 @@
         </div>
     </section>
 
-    <script>
-        $("#add-images").on('click', function() {
+    <script>$("#add-images").on('click', function() {
             $("#images-preview").append(`
                 <div class="mb-3">
                     <input type="file" name="images[]" class="form-control" id="images" placeholder="input your images here..">

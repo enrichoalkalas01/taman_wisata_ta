@@ -22,10 +22,17 @@ class dashboard extends Controller
         // echo $query["lat"];
         $DataUser = Session::get('users');
         if ( $DataUser != NULL ) {
+            $DataTamanWisata = DB::table('favourites')->where('user_id', $DataUser->id)
+                            ->join('taman_wisata', 'taman_wisata.id', '=', 'favourites.taman_id')
+                            ->get();
             if ( $DataUser->first()['type'] != 'admin' ) {
-                return view('dashboard/index');
+                return view('dashboard/index', [
+                    'data_taman' => $DataTamanWisata,
+                ]);
             } else {
-                return view('dashboard/admin/index');
+                return view('dashboard/admin/index',[
+                    'data_taman' => $DataTamanWisata,
+                ]);
             }
         } else {
             return redirect('/login');
@@ -254,7 +261,7 @@ class dashboard extends Controller
         }
     }
 
-    public function tamanWisataEditPost(Request $request, $id) {
+    public function tamanWisataEditPost(Request $request) {
         $UserId = Session::get('users')->id;
         $status_images = false;
         $status_images_link = false;
@@ -270,27 +277,29 @@ class dashboard extends Controller
             }
         }
 
-        var_dump($_POST);
-        echo "<br>";
-        var_dump($request->thumbnail);
-        echo "<br>";
+        // var_dump($_POST);
+        // echo "<br>";
+        // var_dump($request->thumbnail);
+        // echo "<br>";
 
-        // $model = new taman_wisata;
-        // $model->title = $_POST["title"];
-        // $model->rating = null;
-        // $model->excerpt = $_POST["excerpt"];
-        // $model->simple_location = $_POST["simple_location"];
-        // $model->latitude = $_POST["latitude"];
-        // $model->longitude = $_POST["longitude"];
-        // $model->description = $_POST["description"];
-        // $model->maps = $_POST["maps"];
+        $model = taman_wisata::where('id', $_POST['taman_id'])->get()->first();
+        
+        $model->title = $_POST["title"];
+        $model->rating = null;
+        $model->excerpt = $_POST["excerpt"];
+        $model->simple_location = $_POST["simple_location"];
+        $model->latitude = $_POST["latitude"];
+        $model->longitude = $_POST["longitude"];
+        $model->description = $_POST["description"];
+        $model->maps = $_POST["maps"];
 
-        // var_dump($_POST["thumbnail"]);
-        // if ( $request->thumbnail !== NULL ) {
-            
-        // } else {
-        //     $model->thumbnail = 
-        // }
+        
+        if ( $request->thumbnail !== NULL ) {
+            var_dump($request->thumbnail);
+            var_dump($_POST["thumbnail"]);
+        } else {
+            var_dump($_POST);
+        }
 
         // if($request->images) {
         //     $status_images = true;

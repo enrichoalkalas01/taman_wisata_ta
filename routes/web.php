@@ -6,6 +6,7 @@ use App\Http\Controllers\taman_wisata;
 use App\Http\Controllers\users;
 use App\Http\Controllers\dashboard;
 use App\Http\Controllers\comment;
+use App\Http\Controllers\favourites;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,3 +51,7 @@ Route::post('/dashboard/admin/taman-wisata/edit', [dashboard::class, 'tamanWisat
 
 // Comments
 Route::post('/comments/{id}', [comment::class, 'create']);
+
+// Favourites
+Route::get('/add-to-favourites/{id}', [favourites::class, 'add']);
+Route::get('/remove-to-favourites/{id}', [favourites::class, 'remove']);

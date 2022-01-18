@@ -12,19 +12,31 @@ use App\Models\Profile;
 
 class users extends Controller
 {
-    public function login() {
-        return view('users/login');
+    public function login(Request $request) {
+        if ( Session::get('users') ) {
+            return redirect()->back();
+        } else {
+            return view('users/login');
+        }
     }
 
     public function register() {
-        return view('users/register');
+        if ( Session::get('users') ) {
+            return redirect()->back();
+        } else {
+            return view('users/register');
+        }
     }
 
     public function logout(Request $request) {
-        $request->session()->forget('users');
-        $request->session()->forget('profile');
+        if ( Session::get('users') ) {
+            $request->session()->forget('users');
+            $request->session()->forget('profile');
 
-        return redirect('/');
+            return redirect('/');
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function registerPost(Request $request) {

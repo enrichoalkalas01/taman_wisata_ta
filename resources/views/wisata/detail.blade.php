@@ -143,6 +143,17 @@
                 <h2>Rekomendasi tempat wisata</h2>
             </div>
         </div> -->
+        <div class="row">
+            @if( count($data_favourites) > 0 )
+                <div class="col-md-12 p-3 text-center">
+                    <a class="btn btn-danger" href="/remove-to-favourites/{{ $data_detail->id }}">Remove From Favourites</a>
+                </div>
+            @else
+                <div class="col-md-12 p-3 text-center">
+                    <a class="btn btn-success" href="/add-to-favourites/{{ $data_detail->id }}">Add To Favourites</a>
+                </div>
+            @endif
+        </div>
         <div class="row card shadow mb-4 slider-box">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-center">Preview Images</h6>
@@ -219,17 +230,25 @@
             </div>
             <div class="card-body col-md-12">
                 <!-- Add Comments Here -->
-                <form class="row" action="/comments/{{ $data_detail->id }}" method="post">
-                    @csrf
-                    <input name="users_id" value="{{ Session::get('users')->id }}" style="display: none;" />
-                    <input name="taman_wisata_id" value="{{ $data_detail->id }}" style="display: none;" />
-                    <div class="form-group">
-                        <textarea type="text" name="comment" class="form-control" id="comment" placeholder="input your comment here.."></textarea>
+                @if( Session::get('users') != NULL )
+                    <form class="row" action="/comments/{{ $data_detail->id }}" method="post">
+                        @csrf
+                        <input name="users_id" value="{{ Session::get('users')->id }}" style="display: none;" />
+                        <input name="taman_wisata_id" value="{{ $data_detail->id }}" style="display: none;" />
+                        <div class="form-group">
+                            <textarea type="text" name="comment" class="form-control" id="comment" placeholder="input your comment here.."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-success" type="submit" id="button-comment">Submit Comment</button>
+                        </div>
+                    </form>
+                @else
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="btn btn-success" href="/login">Login to comment..</a>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-success" type="submit" id="button-comment">Submit Comment</button>
-                    </div>
-                </form>
+                @endif
 
                 <!-- List Comments Here -->
                 <div class="col-md-12 wrapper-list-comment" style="padding: 1.5% 2.5% 3.5%;">
