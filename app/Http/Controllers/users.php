@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\Controller;
+
 use App\Models\User;
 use App\Models\Profile;
 
@@ -78,15 +79,36 @@ class users extends Controller
         }
     }
 
-    public function profile() {
-        return view('users/profile');
+    public function profile(Request $request) {
+        $UserData = Session::get('users');
+        if ( $UserData != NULL ) {
+            if ( $UserData->first()['type'] != 'admin' ) {
+                return view('users/profile');
+            } else {
+                return view('users/admin/profile');
+            }
+            
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function edit(Request $request, $id) {
-        $UserData = User::where('id', $id)->get()->first();
-        return view('users/edit', [
-            'user_data' => $UserData,
-        ]);
+        $UserData = Session::get('users');
+        if ( $UserData != NULL ) {
+            $UserDataNew = User::where('id', $id)->get()->first();
+            if ( $UserData->first()['type'] != 'admin' ) {
+                return view('users/edit', [
+                    'user_data' => $UserDataNew,
+                ]);
+            } else {
+                return view('users/admin/edit', [
+                    'user_data' => $UserDataNew,
+                ]);
+            }
+        } else {
+            return redirect('/login');
+        }
     }
 
     public function generateRandomString($length = 10) {
@@ -100,6 +122,7 @@ class users extends Controller
     }
 
     public function editPost(Request $request) {
+        $UserData = Session::get('users');
         $model = User::where('id', $_POST['user_id'])->first();
         $modelProfile = profile::where('users_id', $_POST['user_id'])->first();
         if ( $request->images_profile ) {
