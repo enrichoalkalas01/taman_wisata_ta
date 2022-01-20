@@ -25,7 +25,7 @@ class dashboard extends Controller
             $DataTamanWisata = DB::table('favourites')->where('user_id', $DataUser->id)
                             ->join('taman_wisata', 'taman_wisata.id', '=', 'favourites.taman_id')
                             ->get();
-            if ( $DataUser->first()['type'] != 'admin' ) {
+            if ( $DataUser->type != 'admin' ) {
                 return view('dashboard/index', [
                     'data_taman' => $DataTamanWisata,
                 ]);
@@ -49,7 +49,7 @@ class dashboard extends Controller
     public function tamanWisataCreate(Request $request) {
         $DataUser = Session::get('users');
         if ( $DataUser != NULL ) {
-            if ( $DataUser->first()['type'] == 'admin' ) {
+            if ( $DataUser->type == 'admin' ) {
                 return view('dashboard/admin/taman_wisata_create');
             } else {
                 return redirect('/dashboard');
@@ -244,7 +244,7 @@ class dashboard extends Controller
     public function tamanWisataEdit(Request $request, $id) {
         $DataUser = Session::get('users');
         if ( $DataUser != NULL ) {
-            if ( $DataUser->first()['type'] == 'admin' ) {
+            if ( $DataUser->type == 'admin' ) {
                 $GetData = DB::table('taman_wisata')->where('id', $id)->get()->first();
                 $Fasilitas = DB::table('fasilitas')->where('taman_id', $id)->get();
                 $Images = DB::table('images')->where('type_table', 'taman_wisata')
@@ -278,180 +278,299 @@ class dashboard extends Controller
             }
         }
 
-        // var_dump($_POST);
-        // echo "<br>";
-        // var_dump($request->thumbnail);
-        // echo "<br>";
-
         $model = taman_wisata::where('id', $_POST['taman_id'])->get()->first();
         
         $model->title = $_POST["title"];
-        $model->rating = null;
+        $model->rating = $_POST["rating"];
         $model->excerpt = $_POST["excerpt"];
         $model->simple_location = $_POST["simple_location"];
         $model->latitude = $_POST["latitude"];
         $model->longitude = $_POST["longitude"];
         $model->description = $_POST["description"];
         $model->maps = $_POST["maps"];
+        $model->price = $_POST["price"];
 
-        
-        if ( $request->thumbnail !== NULL ) {
-            var_dump($request->thumbnail);
-            var_dump($_POST["thumbnail"]);
+        $status_images = false;
+        $status_images_link = false;
+        $status_images_post = false;
+        $status_fasilitas = false;
+
+        // Jika Thumbnail Tidak Ada
+        if ( $request->thumbnail === NULL ) {
+            $model->thumbnail = $_POST['exist_thumbnail'];
+            foreach($_POST as $key => $value) {
+                if ( $key === 'imageslink' ) { $status_images_link = true; }
+                if ( $key === 'fasilitas_id' ) { $status_fasilitas = true; }
+                if ( $key === 'exist_images' ) { $status_images_post = true; }
+            }
+
+            // If Detect New Images
+            if ( $request->images ) { $status_images = true; }
+
+            fasilitas::where('taman_id', $_POST['taman_id'])->delete();
+            for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                $fasilitas = new fasilitas;
+                $fasilitas->taman_id = $model->id;
+                $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                $fasilitas->save();
+            }
+
+            if ( $status_images === false && $status_images_link === false && $status_images_post === false ) {
+                if ( $model->save() ) {
+                    if ( $status_fasilitas ) {
+                        return redirect('/dashboard/taman-wisata');
+                    } else {
+                        return redirect('/dashboard/taman-wisata');
+                    }
+                } else {
+                    return redirect()->back();
+                }
+            } else if ( $status_images === false && $status_images_link === true && $status_images_post === false ) {
+                // If Images Link Is Exist 
+                if ( $model->save() ) {
+                    images::where('relation_id',$_POST['taman_id'])->where('type_table','taman_wisata')
+                            ->where('type','imageslink')->delete();
+                    $counted = 0;
+                    for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $request->imageslink[$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'imageslink';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $counted += 1; 
+                    }
+                } else {
+                    return redirect()->back();
+                }
+            } else if ( $status_images === false && $status_images_link === false && $status_images_post === true ) {
+                if ( $model->save() ) {
+                    images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+
+                    for( $i = 0; $i < count($_POST['exist_images']); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $_POST['exist_images'][$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                    }
+
+                    if ( $request->images ) {
+                        $counted = 0;
+                        foreach($request->images as $value) {
+                            $newNameArr = $this->generateRandomString(20) . '.' . $value->getClientOriginalExtension();
+                            $model_images = new images;
+                            $model_images->name_image = $newNameArr;
+                            $model_images->type_table = 'taman_wisata';
+                            $model_images->type = 'images';
+                            $model_images->relation_id = $model->id;
+                            $model_images->save();
+                            $value->storeAs('public/images', $newNameArr);
+                            $counted += 1; 
+                        }
+
+                        return redirect('/dashboard/taman-wisata');
+                    } else {
+                        return redirect('/dashboard/taman-wisata');
+                    }
+                } else {
+                    return redirect()->back();
+                }
+            } else if ( $status_images === true && $status_images_link === false && $status_images_post === false ) {
+                if ( $model->save() ) {
+                    images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+
+                    $counted = 0;
+                    foreach($request->images as $value) {
+                        $newNameArr = $this->generateRandomString(20) . '.' . $value->getClientOriginalExtension();
+                        $model_images = new images;
+                        $model_images->name_image = $newNameArr;
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $value->storeAs('public/images', $newNameArr);
+                        $counted += 1; 
+                    }
+
+                    return redirect('/dashboard/taman-wisata');
+                } else {
+                    return redirect()->back();
+                }
+            } else if ( $status_images === false && $status_images_link === true && $status_images_post === true ) {
+                images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+                images::where('relation_id', $_POST['taman_id'])->where('type_table', 'taman_wisata')
+                        ->where('type', 'imageslink')->delete();
+
+                for( $i = 0; $i < count($_POST['exist_images']); $i++ ) {
+                    $model_images = new images;
+                    $model_images->name_image = $_POST['exist_images'][$i];
+                    $model_images->type_table = 'taman_wisata';
+                    $model_images->type = 'images';
+                    $model_images->relation_id = $model->id;
+                    $model_images->save();
+                }
+
+                $counted = 0;
+                for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                    $model_images = new images;
+                    $model_images->name_image = $request->imageslink[$i];
+                    $model_images->type_table = 'taman_wisata';
+                    $model_images->type = 'imageslink';
+                    $model_images->relation_id = $model->id;
+                    $model_images->save();
+                    $counted += 1; 
+                }
+
+                return redirect('/dashboard/taman-wisata');
+            } else if ( $status_images === true && $status_images_link === false && $status_images_post === true ) {
+                // Images Post
+                images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+
+                for( $i = 0; $i < count($_POST['exist_images']); $i++ ) {
+                    $model_images = new images;
+                    $model_images->name_image = $_POST['exist_images'][$i];
+                    $model_images->type_table = 'taman_wisata';
+                    $model_images->type = 'images';
+                    $model_images->relation_id = $model->id;
+                    $model_images->save();
+                }
+
+                // Images
+                images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+
+                $counted = 0;
+                foreach($request->images as $value) {
+                    $newNameArr = $this->generateRandomString(20) . '.' . $value->getClientOriginalExtension();
+                    $model_images = new images;
+                    $model_images->name_image = $newNameArr;
+                    $model_images->type_table = 'taman_wisata';
+                    $model_images->type = 'images';
+                    $model_images->relation_id = $model->id;
+                    $model_images->save();
+                    $value->storeAs('public/images', $newNameArr);
+                    $counted += 1; 
+                }
+
+                return redirect('/dashboard/taman-wisata');
+            } else {
+                images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+                images::where('relation_id', $_POST['taman_id'])->where('type_table', 'taman_wisata')
+                        ->where('type', 'imageslink')->delete();
+
+                $counted = 0;
+                if ( $status_images_post ) {
+                    for( $i = 0; $i < count($_POST['exist_images']); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $_POST['exist_images'][$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                    }
+                }
+                
+                if ( $request->images ) {
+                    foreach($request->images as $value) {
+                        $newNameArr = $this->generateRandomString(20) . '.' . $value->getClientOriginalExtension();
+                        $model_images = new images;
+                        $model_images->name_image = $newNameArr;
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $value->storeAs('public/images', $newNameArr);
+                        $counted += 1; 
+                    }
+                }
+
+                if ( $request->imageslink ) {
+                    for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $request->imageslink[$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'imageslink';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $counted += 1; 
+                    }
+                }
+
+                return redirect('/dashboard/taman-wisata');
+            }
         } else {
-            var_dump($_POST);
+            // Jika Thumbnail Ada
+            $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
+            $model->thumbnail = $newNameThumbnail;
+            $request->thumbnail->storeAs('public/images', $newNameThumbnail);
+
+            images::where('relation_id', $_POST['taman_id'])->where('type', 'images')
+                        ->where('type_table', 'taman_wisata')->delete();
+            images::where('relation_id', $_POST['taman_id'])->where('type_table', 'taman_wisata')
+                    ->where('type', 'imageslink')->delete();
+
+            fasilitas::where('taman_id', $_POST['taman_id'])->delete();
+            for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
+                $fasilitas = new fasilitas;
+                $fasilitas->taman_id = $model->id;
+                $fasilitas->name_icon = $request->fasilitas_icon[$i];
+                $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
+                $fasilitas->save();
+            }
+
+            $counted = 0;
+            
+            if ( $model->save() ) {
+                if ( $status_images_post ) {
+                    for( $i = 0; $i < count($_POST['exist_images']); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $_POST['exist_images'][$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                    }
+                }
+    
+                if ( $request->imageslink ) {
+                    for( $i = 0; $i < count($request->imageslink); $i++ ) {
+                        $model_images = new images;
+                        $model_images->name_image = $request->imageslink[$i];
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'imageslink';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $counted += 1; 
+                    }
+                }
+    
+                if ( $request->images ) {
+                    foreach($request->images as $value) {
+                        $newNameArr = $this->generateRandomString(20) . '.' . $value->getClientOriginalExtension();
+                        $model_images = new images;
+                        $model_images->name_image = $newNameArr;
+                        $model_images->type_table = 'taman_wisata';
+                        $model_images->type = 'images';
+                        $model_images->relation_id = $model->id;
+                        $model_images->save();
+                        $value->storeAs('public/images', $newNameArr);
+                        $counted += 1; 
+                    }
+                }
+
+                return redirect('/dashboard/taman-wisata');
+            } else {
+                return redirect()->back();
+            }
         }
-
-        // if($request->images) {
-        //     $status_images = true;
-        // }
-        
-        // if($request->imageslink) {
-        //     $status_images_link = true;
-        // }
-        
-        // if ( $request->thumbnail ) {
-        //     $newNameThumbnail = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
-        // }
-
-        // if ( $request->thumbnail ) {
-        //     $model = new taman_wisata;
-        //     $model->users_id = $UserId;
-        
-        //     $model->thumbnail = $newNameThumbnail;
-        
-        
-        
-        
-        // } else {
-        //     $model = new taman_wisata;
-        //     $model->users_id = $UserId;
-        //     $model->title = $_POST["title"];
-        //     $model->thumbnail = null;
-        //     $model->rating = null;
-        //     $model->simple_location = $_POST["simple_location"];
-        //     $model->excerpt = $_POST["excerpt"];
-        //     $model->latitude = $_POST["latitude"];
-        //     $model->longitude = $_POST["longitude"];
-        //     $model->description = $_POST["description"];
-        //     $model->maps = $_POST["maps"];
-        // }
-
-        // if ( $request->thumbnail ) {
-        //     $request->thumbnail->storeAs('public/images', $newNameThumbnail);
-        // }
-
-        // if ( !$status_images && !$status_images_link ) {
-        //     if ( $model->save() ) {
-        //         for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
-        //             $fasilitas = new fasilitas;
-        //             $fasilitas->taman_id = $model->id;
-        //             $fasilitas->name_icon = $request->fasilitas_icon[$i];
-        //             $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
-        //             $fasilitas->save();
-        //         }
-        //         return redirect('/dashboard/taman-wisata');
-        //     } else {
-        //         return redirect('/dashboard/taman-wisata/create');
-        //     }
-        // } else { 
-        //     if ( $status_images && !$status_images_link ) {
-        //         if ( $model->save() ) {
-        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
-        //                 $fasilitas = new fasilitas;
-        //                 $fasilitas->taman_id = $model->id;
-        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
-        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
-        //                 $fasilitas->save();
-        //             }
-
-        //             $counted = 0;
-        //             for( $i = 0; $i < count($request->images); $i++ ) {
-        //                 $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
-        //                 $model_images = new images;
-        //                 $model_images->name_image = $newNameArr;
-        //                 $model_images->type_table = 'taman_wisata';
-        //                 $model_images->type = 'images';
-        //                 $model_images->relation_id = $model->id;
-        //                 $model_images->save();
-        //                 $request->images[$i]->storeAs('public/images', $newNameArr);
-        //                 $counted += 1; 
-        //             }
-                    
-        //             if ( $counted == count($request->images) ) {
-        //                 return redirect('/dashboard/taman-wisata');
-        //             }
-        //         } else {
-        //             return redirect('/dashboard/taman-wisata/create');
-        //         }
-        //     } else if ( $status_images_link && !$status_images ){
-        //         if ( $model->save() ) {
-        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
-        //                 $fasilitas = new fasilitas;
-        //                 $fasilitas->taman_id = $model->id;
-        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
-        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
-        //                 $fasilitas->save();
-        //             }
-
-        //             $counted = 0;
-        //             for( $i = 0; $i < count($request->imageslink); $i++ ) {
-        //                 $model_images = new images;
-        //                 $model_images->name_image = $request->imageslink[$i];
-        //                 $model_images->type_table = 'taman_wisata';
-        //                 $model_images->type = 'imageslink';
-        //                 $model_images->relation_id = $model->id;
-        //                 $model_images->save();
-        //                 $counted += 1; 
-        //             }
-                    
-        //             if ( $counted == count($request->imageslink) ) {
-        //                 return redirect('/dashboard/taman-wisata');
-        //             }
-        //         } else {
-        //             return redirect('/dashboard/taman-wisata/create');
-        //         }
-        //     } else {
-        //         if ( $model->save() ) {
-        //             for( $i = 0; $i < count($request->fasilitas_text); $i++ ) {
-        //                 $fasilitas = new fasilitas;
-        //                 $fasilitas->taman_id = $model->id;
-        //                 $fasilitas->name_icon = $request->fasilitas_icon[$i];
-        //                 $fasilitas->title_fasilitas = $request->fasilitas_text[$i];
-        //                 $fasilitas->save();
-        //             }
-
-        //             $counted = 0;
-        //             for( $i = 0; $i < count($request->images); $i++ ) {
-        //                 $newNameArr = $this->generateRandomString(20) . '.' . $request->thumbnail->getClientOriginalExtension();
-        //                 $model_images = new images;
-        //                 $model_images->name_image = $newNameArr;
-        //                 $model_images->type_table = 'taman_wisata';
-        //                 $model_images->type = 'images';
-        //                 $model_images->relation_id = $model->id;
-        //                 $model_images->save();
-        //                 $request->images[$i]->storeAs('public/images', $newNameArr);
-        //                 $counted += 1; 
-        //             }
-
-        //             for( $i = 0; $i < count($request->imageslink); $i++ ) {
-        //                 $model_images = new images;
-        //                 $model_images->name_image = $request->imageslink[$i];
-        //                 $model_images->type_table = 'taman_wisata';
-        //                 $model_images->type = 'imageslink';
-        //                 $model_images->relation_id = $model->id;
-        //                 $model_images->save();
-        //                 $counted += 1; 
-        //             }
-                    
-        //             if ( $counted == ( count($request->images) + count($request->imageslink) ) ) {
-        //                 return redirect('/dashboard/taman-wisata');
-        //             }
-        //         } else {
-        //             return redirect('/dashboard/taman-wisata/create');
-        //         }
-        //     }
-        // }
     }
 
     public function generateRandomString($length = 10) {

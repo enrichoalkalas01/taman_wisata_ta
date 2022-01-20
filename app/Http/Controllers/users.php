@@ -82,7 +82,7 @@ class users extends Controller
     public function profile(Request $request) {
         $UserData = Session::get('users');
         if ( $UserData != NULL ) {
-            if ( $UserData->first()['type'] != 'admin' ) {
+            if ( $UserData->type != 'admin' ) {
                 return view('users/profile');
             } else {
                 return view('users/admin/profile');
@@ -97,7 +97,7 @@ class users extends Controller
         $UserData = Session::get('users');
         if ( $UserData != NULL ) {
             $UserDataNew = User::where('id', $id)->get()->first();
-            if ( $UserData->first()['type'] != 'admin' ) {
+            if ( $UserData->type != 'admin' ) {
                 return view('users/edit', [
                     'user_data' => $UserDataNew,
                 ]);

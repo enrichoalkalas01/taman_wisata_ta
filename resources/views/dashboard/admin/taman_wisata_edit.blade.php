@@ -114,7 +114,7 @@
                             <label for="fasilitas" class="form-label">fasilitas</label>
                             @foreach($data_fasilitas as $value)
                                 <div class="mb-3">
-                                    <select name="fasilitas_icon[]" class="form-control mr-2 col-md-2 col-sm-12" defaultValue="{{ $value->name_icon }}">
+                                    <select value="{{ $value->name_icon }}" name="fasilitas_icon[]" class="form-control mr-2 col-md-2 col-sm-12" defaultValue="{{ $value->name_icon }}">
                                         <option value="fas fa-home">Icon home</option>
                                         <option value="fas fa-wifi">Icon wifi</option>
                                         <option value="fas fa-restroom">Icon toilet</option>
@@ -149,12 +149,13 @@
                             @foreach($data_images as $value)
                                 @if($value->type != 'imageslink')
                                     <div class="mb-3">
-                                        <input value="" type="file" name="images[]" class="form-control" id="images" placeholder="input your images here..">
+                                        <input value="{{ $value->type }}" type="file" name="images[]" class="form-control" id="images" placeholder="input your images here..">
                                         <div class="ml-2 btn btn-danger" id="btn-delete-more">-</div>
+                                        <input style="display: none;" class="col-md-12" value="{{ $value->name_image }}" name="exist_images[]" />
                                     </div>
                                 @else
                                     <div class="mb-3">
-                                        <input value="" type="text" name="imageslink[]" class="form-control" id="imageslink" placeholder="input your images here..">
+                                        <input value="{{ $value->name_image }}" type="text" name="imageslink[]" class="form-control" id="imageslink" placeholder="input your images here..">
                                         <div class="ml-2 btn btn-danger" id="btn-delete-more-link">-</div>
                                     </div>
                                 @endif
