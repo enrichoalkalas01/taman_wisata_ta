@@ -151,7 +151,7 @@
                                     <div class="mb-3">
                                         <input value="{{ $value->type }}" type="file" name="images[]" class="form-control" id="images" placeholder="input your images here..">
                                         <div class="ml-2 btn btn-danger" id="btn-delete-more">-</div>
-                                        <input style="display: none;" class="col-md-12" value="{{ $value->name_image }}" name="exist_images[]" />
+                                        <input id="exist" style="display: none;" class="col-md-12" value="{{ $value->name_image }}" name="exist_images[]" />
                                     </div>
                                 @else
                                     <div class="mb-3">
@@ -214,6 +214,10 @@
             `)
         })
 
+        $(document).on('change', '#images', function() {
+            $(this).parent().find("#exist").remove()
+        })
+
         $(document).on('click','#btn-delete-more',function(){
             $(this).parent().remove()
         });
@@ -225,7 +229,6 @@
         let mapsValue = "{{ $data_taman->maps }}"
         
         if ( mapsValue !== null || mapsValue !== '' ) {
-            
             $('#maps-show').html($("#maps").val())
         }
 
