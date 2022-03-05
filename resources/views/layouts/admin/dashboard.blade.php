@@ -75,9 +75,9 @@
                 </a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/tempat-wisata">
+                <a class="nav-link" href="/dashboard/manage-location">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Explore Taman Wisata</span>
+                    <span>Manage Location</span>
                 </a>
             </li>
             <li class="nav-item active">

@@ -82,14 +82,58 @@
                 </div>
                 <div class="row" style="padding: 2.5% 10%">
                     <form class="col-md-12 d-flex justify-center d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
+                        <!-- <div class="row wrapper-search"> -->
+                            <div class="row input-group mb-3">
+                                <input class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                <div class="col-1 input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row mb-3">
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="rating" class="form-label col-3">Rating : </label>
+                                        <div class="col-9">
+                                            <select name="rating" class="form-control w-100">
+                                                <option value="">default</option>
+                                                <option value="sangat bagus">sangat bagus</option>
+                                                <option value="bagus">bagus</option>
+                                                <option value="normal">normal</option>
+                                                <option value="tidak bagus">tidak bagus</option>
+                                                <option value="sangat tidak bagus">sangat tidak bagus</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="location" class="form-label col-4">Location : </label>
+                                        <div class="col-8">
+                                            <select name="location" class="form-control w-100">
+                                                <option value="">default</option>
+                                                @foreach($DataSL as $simple_location)
+                                                    <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="price" class="form-label col-3">Price : </label>
+                                        <div class="col-9">
+                                            <select name="price" class="form-control w-100">
+                                                <option value="">default</option>
+                                                <option value="{{ $HighPrice }}">harga tertinggi</option>
+                                                <option value="{{ $LowPrice }}">harga terendah</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- </div> -->
                     </form>
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -137,12 +181,29 @@
         </div>
     </div>
 
-    <!-- <div id="content" class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 p-3 text-center">
-                <h2>Rekomendasi tempat wisata</h2>
-            </div>
-        </div>
-    </div> -->
+    <script>
+        const getCurrentLocation = () => {
+            var getPosition = {
+                enableHighAccuracy: false,
+                timeout: 9000,
+                maximumAge: 0
+            };
+            
+            // Your Current Position Here
+            function success(gotPosition) {
+                var uLat = gotPosition.coords.latitude;
+                var uLon = gotPosition.coords.longitude;
+                console.log(`${uLat}`, `${uLon}`);
+            };
+            
+            function error(err) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+            };
+            
+            navigator.geolocation.getCurrentPosition(success, error, getPosition);
+        }
+
+        // getCurrentLocation()
+    </script>
 @endsection
     

@@ -7,23 +7,38 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
+use App\Models\simple_location;
+use App\Models\taman_wisata as TamanModels;
+
 class taman_wisata extends Controller
 {
     public function index(Request $request) {
-        if ( $request->input('query') ) {
+        $DataSL = simple_location::all();
+        $LowPrice = TamanModels::min('price');
+        $HighPrice = TamanModels::max('price');
+        if (
+            ( $request->input('query') && $request->input('query') != '' ) || 
+            ( $request->input('rating') && $request->input('rating') != '' )
+        ) {
             $DataTaman = DB::table('taman_wisata')
-                        ->where('title', $request->input('query'))
-                        ->orWhere('title', 'like', '%' . $request->input('query') . '%')
-                        ->orWhere('excerpt', 'like', '%' . $request->input('query') . '%')
-                        ->orWhere('description', 'like', '%' . $request->input('query') . '%')
-                        ->simplePaginate(20);
+                ->where('title', $request->input('query'))
+                ->where('rating', $request->input('rating'))
+                ->orWhere('description', 'like', '%' . $request->input('query') . '%')
+                ->orWhere('simple_location', 'like', '%' . $request->input('query') . '%')
+                ->simplePaginate(20);
         } else {
+            echo "else";
             $DataTaman = DB::table('taman_wisata')->simplePaginate(20);
         }
 
         return view('wisata/index', [
-            'data_taman' => $DataTaman
+            'data_taman' => $DataTaman,
+            'DataSL' => $DataSL,
+            'HighPrice' => $HighPrice,
+            'LowPrice' => $LowPrice,
         ]);
+
+        // SELECT * FROM taman_wisata WHERE price IN (SELECT MAX(price) FROM taman_wisata)
     }
 
     public function detail(Request $request, $id) {
@@ -56,9 +71,43 @@ class taman_wisata extends Controller
             'data_favourites' => $DataFavourites
         ]);
     }
+
+    public function SeederDataTaman() {
+        $Counted = 0;
+        for ( $i = 0; $i < 250; $i++ ) {
+            $models = new TamanModels;
+            $models->users_id = 1;
+            $models->title = 'Ini title ' . $i;
+            
+            if ( $i % 2 == 0 ) {
+                $models->rating = 'bagus';
+                $models->simple_location = 'nusantara';
+                $models->latitude = '-6.393724041022173';
+                $models->longitude = '106.80834472294565';
+                $models->price = $i * 2500;
+            } else {
+                $models->rating = 'normal';
+                $models->simple_location = 'citayam';
+                $models->latitude = '-6.448703561458972';
+                $models->longitude = '106.80243443934127';
+                $models->price = $i * 1500;
+            }
+            
+            $models->thumbnail = '';
+            $models->excerpt = 'ini excerpt dari title ' . $i;
+            $models->description = 'bla bla bla bla bla bla bla bla bla bla bla bla';
+            $models->maps = '';
+            $models->save();
+        }
+    }
 }
 
-/* SELECT * FROM `comment` INNER JOIN users ON users.id = comment.users_id INNER JOIN profile on profile.users_id = comment.users_id WHERE taman_wisata_id = 1 */
+/* 
+    SELECT * FROM `comment` INNER JOIN users ON users.id = comment.users_id INNER JOIN profile on profile.users_id = comment.users_id WHERE taman_wisata_id = 1
+    SELECT * FROM taman_wisata c WHERE c.price < 50000 AND NOT EXISTS ( SELECT * FROM taman_wisata c1 WHERE c1.price < c.price AND c1.rating LIKE '%bagus%' AND ( c1.price < c.price ) )
+    SELECT * FROM taman_wisata WHERE taman_wisata.simple_location = 'sawangan' AND NOT EXISTS ( SELECT * FROM taman_wisata WHERE taman_wisata.simple_location = 'sawangan' AND taman_wisata.price > 0 AND taman_wisata.rating LIKE '%bagus%' )
+*/
+
 
 /*
 DB::table('tib_db.tb_request')

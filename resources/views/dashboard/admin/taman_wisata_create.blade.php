@@ -50,9 +50,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="simple_location" class="form-label">simple_location</label>
                                 <input type="text" name="simple_location" class="form-control" id="simple_location" placeholder="input your simple_location here..">
+                            </div> -->
+                            <div class="mb-3">
+                                <label for="simple_location" class="form-label">simple_location</label>
+                                <div class="mb-3">
+                                    <select name="simple_location" class="form-control mr-2 col-md-12 col-sm-12">
+                                        @foreach($DataSL as $simple_location)
+                                            <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">

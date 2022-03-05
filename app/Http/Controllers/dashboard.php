@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\images;
 use App\Models\taman_wisata;
 use App\Models\fasilitas;
+use App\Models\simple_location;
 
 class dashboard extends Controller
 {
@@ -48,9 +49,12 @@ class dashboard extends Controller
 
     public function tamanWisataCreate(Request $request) {
         $DataUser = Session::get('users');
+        $DataSL = simple_location::all();
         if ( $DataUser != NULL ) {
             if ( $DataUser->type == 'admin' ) {
-                return view('dashboard/admin/taman_wisata_create');
+                return view('dashboard/admin/taman_wisata_create', [
+                    "DataSL" => $DataSL
+                ]);
             } else {
                 return redirect('/dashboard');
             }
