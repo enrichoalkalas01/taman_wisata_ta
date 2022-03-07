@@ -74,23 +74,32 @@ class taman_wisata extends Controller
 
     public function SeederDataTaman() {
         $Counted = 0;
-        for ( $i = 0; $i < 250; $i++ ) {
+        for ( $i = 250; $i < 300; $i++ ) {
             $models = new TamanModels;
             $models->users_id = 1;
             $models->title = 'Ini title ' . $i;
             
             if ( $i % 2 == 0 ) {
-                $models->rating = 'bagus';
-                $models->simple_location = 'nusantara';
-                $models->latitude = '-6.393724041022173';
-                $models->longitude = '106.80834472294565';
-                $models->price = $i * 2500;
+                $models->rating = 'tidak bagus';
+                $models->simple_location = 'tiptop';
+                $models->latitude = '-6.403005609582511';
+                $models->longitude = '106.83529018425048';
+                $models->price = $i * 100;
+                // $models->simple_location = 'nusantara';
+                // $models->latitude = '-6.393724041022173';
+                // $models->longitude = '106.80834472294565';
+                // $models->price = $i * 2500;
+                
             } else {
-                $models->rating = 'normal';
-                $models->simple_location = 'citayam';
-                $models->latitude = '-6.448703561458972';
-                $models->longitude = '106.80243443934127';
-                $models->price = $i * 1500;
+                $models->rating = 'sangat tidak bagus';
+                $models->simple_location = 'jembatan serong';
+                $models->latitude = '-6.416864724604323';
+                $models->longitude = '1106.7967449977435'; 
+                $models->price = $i * 200;
+                // $models->simple_location = 'citayam';
+                // $models->latitude = '-6.448703561458972';
+                // $models->longitude = '106.80243443934127';
+                // $models->price = $i * 1500;
             }
             
             $models->thumbnail = '';
