@@ -86,7 +86,7 @@
                             <div class="row input-group mb-3">
                                 <input class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="col-1 input-group-append">
-                                    <button class="btn btn-primary" type="submit">
+                                    <button class="btn btn-primary" type="submit" id="search-btn">
                                         <i class="fas fa-search fa-sm"></i>
                                     </button>
                                 </div>

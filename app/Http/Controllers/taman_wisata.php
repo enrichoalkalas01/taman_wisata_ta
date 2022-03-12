@@ -16,29 +16,47 @@ class taman_wisata extends Controller
         $DataSL = simple_location::all();
         $LowPrice = TamanModels::min('price');
         $HighPrice = TamanModels::max('price');
-        if (
-            ( $request->input('query') && $request->input('query') != '' ) || 
-            ( $request->input('rating') && $request->input('rating') != '' )
-        ) {
-            $DataTaman = DB::table('taman_wisata')
-                ->where('title', $request->input('query'))
-                ->where('rating', $request->input('rating'))
-                ->orWhere('description', 'like', '%' . $request->input('query') . '%')
-                ->orWhere('simple_location', 'like', '%' . $request->input('query') . '%')
-                ->simplePaginate(20);
-        } else {
-            echo "else";
-            $DataTaman = DB::table('taman_wisata')->simplePaginate(20);
-        }
+        $Query = $request->input('query') ? $request->input('query') : '';
+        $Rating = $request->input('rating') ? $request->input('rating') : '';
+        $Price = $request->input('price') ? $request->input('price') : '';
+        $Location = $request->input('location') ? $request->input('location') : '';
 
-        return view('wisata/index', [
-            'data_taman' => $DataTaman,
-            'DataSL' => $DataSL,
-            'HighPrice' => $HighPrice,
-            'LowPrice' => $LowPrice,
-        ]);
+            $DataTaman = DB::select("
+                SELECT * FROM taman_wisata tw1
+                WHERE tw1.title LIKE '%". $Query ."%'
+                AND tw1.rating LIKE '%". $Rating ."%'
+                AND tw1.simple_location LIKE '%". $Location ."%'
+                AND tw1.price < 10000000
+                AND NOT EXISTS (
+                    SELECT * FROM taman_wisata tw2
+                    WHERE tw2.title LIKE '%". $Query ."%'
+                    AND tw2.rating LIKE '%". $Rating ."%'
+                    AND tw2.simple_location LIKE '%". $Location ."%'
+                    AND tw2.price <= tw1.price
+                    AND ( tw2.price < tw1.price )
+                )
+            ");
 
-        // SELECT * FROM taman_wisata WHERE price IN (SELECT MAX(price) FROM taman_wisata)
+            echo json_encode($DataTaman);
+
+            /*
+            
+            SELECT * FROM taman_wisata tw1
+            WHERE tw1.rating LIKE '%bagus%'
+            AND NOT EXISTS (
+                SELECT * FROM taman_wisata tw2
+                WHERE tw2.rating LIKE '%bagus%'
+                AND ( tw2.price < tw1.price )
+            )
+            
+            */
+
+        // return view('wisata/index', [
+        //     'data_taman' => $DataTaman,
+        //     'DataSL' => $DataSL,
+        //     'HighPrice' => $HighPrice,
+        //     'LowPrice' => $LowPrice,
+        // ]);
     }
 
     public function detail(Request $request, $id) {
@@ -115,6 +133,7 @@ class taman_wisata extends Controller
     SELECT * FROM `comment` INNER JOIN users ON users.id = comment.users_id INNER JOIN profile on profile.users_id = comment.users_id WHERE taman_wisata_id = 1
     SELECT * FROM taman_wisata c WHERE c.price < 50000 AND NOT EXISTS ( SELECT * FROM taman_wisata c1 WHERE c1.price < c.price AND c1.rating LIKE '%bagus%' AND ( c1.price < c.price ) )
     SELECT * FROM taman_wisata WHERE taman_wisata.simple_location = 'sawangan' AND NOT EXISTS ( SELECT * FROM taman_wisata WHERE taman_wisata.simple_location = 'sawangan' AND taman_wisata.price > 0 AND taman_wisata.rating LIKE '%bagus%' )
+    // SELECT * FROM taman_wisata WHERE price IN (SELECT MAX(price) FROM taman_wisata)
 */
 
 
@@ -126,4 +145,12 @@ DB::table('tib_db.tb_request')
 ->join('tib_db.tb_events', 'tib_db.tb_events_log.event_id', '=', 'tib_db.tb_events.id')
 ->select('tib_db.tb_request.*', 'tib_db.tb_cob.cob_code', 'tib_client.tb_client.name', 'tib_db.tb_events.event_name', 'tib_db.tb_events_log.event_id')   
 ->get();
+
+$DataTaman = DB::table('taman_wisata')
+    ->where('title', 'like', '%' . $Query . '%')
+    ->orWhere('excerpt', 'like', '%' . $Query . '%')
+    ->orWhere('description', 'like', '%' . $Query . '%')
+    ->simplePaginate(20);
+
+echo json_encode($DataTaman);
 */
