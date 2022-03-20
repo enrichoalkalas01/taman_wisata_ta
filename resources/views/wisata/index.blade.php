@@ -60,6 +60,14 @@
         .links-page nav {
             width: auto;
         }
+
+        .links-page svg {
+            width: 2%;
+        }
+
+        .links-page nav div:nth-child(2) {
+            display: none;
+        }
     </style>
     <div id="banner">
         <div class="jumbotron jumbotron-fluid" style="margin: 0;">
@@ -122,13 +130,31 @@
                                 </div>
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="row">
-                                        <label for="price" class="form-label col-3">Price : </label>
+                                        <label for="sort-by" class="form-label col-3">sort-by : </label>
                                         <div class="col-9">
-                                            <select name="price" class="form-control w-100">
+                                            <select name="sort-by" class="form-control w-100">
                                                 <option value="">default</option>
                                                 <option value="{{ $HighPrice }}">harga tertinggi</option>
                                                 <option value="{{ $LowPrice }}">harga terendah</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="price-min" class="form-label col-3">price min : </label>
+                                        <div class="col-9">
+                                            <input class="form-control w-100" id="price-min" type="numbv" name="price-min" placeholder="price min">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="price-max" class="form-label col-3">price max : </label>
+                                        <div class="col-9">
+                                            <input class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
                                         </div>
                                     </div>
                                 </div>
@@ -137,42 +163,42 @@
                     </form>
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    @for($i = 0; $i < count($data_taman); $i++)
+                    @foreach($data_taman as $dt)
                         <div class="col">
-                            <a href="/tempat-wisata/detail/{{ $data_taman[$i]->id }}">
+                            <a href="/tempat-wisata/detail/{{ $dt->id }}">
                                 <div class="card shadow-sm">
                                     <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false">
                                         <title>Placeholder</title>
                                         <rect width="100%" height="100%" fill="#55595c"></rect>
                                         <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
                                     </svg> -->
-                                    @if( $data_taman[$i]->thumbnail == NULL )
+                                    @if( $dt->thumbnail == NULL )
                                         <div class="bd-placeholder-img card-img-top bg-image-thumb"></div>
                                     @else
                                         <div class="bd-placeholder-img card-img-top bg-image-thumb"
-                                            style="background-image: url('{{ asset('storage/images/' . $data_taman[$i]->thumbnail) }}')"
+                                            style="background-image: url('{{ asset('storage/images/' . $dt->thumbnail) }}')"
                                         ></div>
                                     @endif
                                     <div class="card-body">
                                         <div class="card-text">
-                                            <h4>{{ $data_taman[$i]->title }}</h4>
+                                            <h4>{{ $dt->title }}</h4>
                                         </div>
                                         <p class="card-text">
-                                            {{ $data_taman[$i]->excerpt }}
+                                            {{ $dt->excerpt }}
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">{{ $data_taman[$i]->simple_location }}</small>
+                                            <small class="text-muted">{{ $dt->simple_location }}</small>
                                                 <!-- <div class="btn-group">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                                 </div> -->
-                                            <small class="text-muted">{{ $data_taman[$i]->created_at }}</small>
+                                            <small class="text-muted">{{ $dt->created_at }}</small>
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                    @endfor
+                    @endforeach
                 </div>
                 <div class="row links-page">
                     {{ $data_taman->links() }}
@@ -203,7 +229,7 @@
             navigator.geolocation.getCurrentPosition(success, error, getPosition);
         }
 
-        // getCurrentLocation()
+        getCurrentLocation()
     </script>
 @endsection
     

@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Input;
 
 use App\Models\simple_location;
 use App\Models\taman_wisata as TamanModels;
@@ -16,47 +19,65 @@ class taman_wisata extends Controller
         $DataSL = simple_location::all();
         $LowPrice = TamanModels::min('price');
         $HighPrice = TamanModels::max('price');
-        $Query = $request->input('query') ? $request->input('query') : '';
-        $Rating = $request->input('rating') ? $request->input('rating') : '';
-        $Price = $request->input('price') ? $request->input('price') : '';
-        $Location = $request->input('location') ? $request->input('location') : '';
+        $Query = ($request->input('query') != NULL) || ($request->input('query') != '') ? $request->input('query') : '';
+        $Rating = ($request->input('rating') != NULL) || ($request->input('rating') != '') != NULL ? $request->input('rating') : '';
+        $Location = ($request->input('location') != NULL) || ($request->input('location') != '') ? $request->input('location') : '';
 
-            $DataTaman = DB::select("
-                SELECT * FROM taman_wisata tw1
-                WHERE tw1.title LIKE '%". $Query ."%'
-                AND tw1.rating LIKE '%". $Rating ."%'
-                AND tw1.simple_location LIKE '%". $Location ."%'
-                AND tw1.price < 10000000
-                AND NOT EXISTS (
-                    SELECT * FROM taman_wisata tw2
-                    WHERE tw2.title LIKE '%". $Query ."%'
-                    AND tw2.rating LIKE '%". $Rating ."%'
-                    AND tw2.simple_location LIKE '%". $Location ."%'
-                    AND tw2.price <= tw1.price
-                    AND ( tw2.price < tw1.price )
-                )
-            ");
-
-            echo json_encode($DataTaman);
-
-            /*
-            
-            SELECT * FROM taman_wisata tw1
-            WHERE tw1.rating LIKE '%bagus%'
-            AND NOT EXISTS (
-                SELECT * FROM taman_wisata tw2
-                WHERE tw2.rating LIKE '%bagus%'
-                AND ( tw2.price < tw1.price )
+        var_dump($Location);
+        $QueryDataTaman = DB::select("
+        SELECT * FROM taman_wisata tw1
+            WHERE ( 
+                tw1.title LIKE '%". $Query ."%'
+                OR tw1.excerpt LIKE '%". $Query ."%'
+                OR tw1.description LIKE '%". $Query ."%'
             )
-            
-            */
+            AND tw1.rating LIKE '%". $Rating ."%'
+            AND tw1.simple_location LIKE '%". $Location ."%'
+            AND tw1.latitude LIKE '%%'
+            AND tw1.longitude LIKE '%%'
+            AND tw1.price > 0
+            AND tw1.price < 50000
+            AND NOT EXISTS (
+                SELECT  * FROM taman_wisata tw2
+                WHERE (
+                    tw2.title LIKE '%". $Query ."%'
+                    OR tw1.excerpt LIKE '%". $Query ."%'
+                    OR tw1.description LIKE '%". $Query ."%'
+                )
+                AND tw2.rating LIKE '%". $Rating ."%'
+                AND tw2.simple_location LIKE '%". $Location ."%'
+                AND tw2.latitude LIKE '%%'
+                AND tw2.longitude LIKE '%%'
+                AND tw2.price >= tw1.price
+                AND tw2.price <= tw1.price
+                AND ( 
+                    tw2.price < tw1.price 
+                    OR tw2.price > tw1.price
+                )
+            )
+        ");
 
-        // return view('wisata/index', [
-        //     'data_taman' => $DataTaman,
-        //     'DataSL' => $DataSL,
-        //     'HighPrice' => $HighPrice,
-        //     'LowPrice' => $LowPrice,
-        // ]);
+        $Page = $request->input('page') ? (int)$request->input('page') : 1;
+        $Size = 15;
+        $Collection = collect($QueryDataTaman);
+        $DataTaman = new LengthAwarePaginator(
+            $Collection->forPage($Page, $Size),
+            $Collection->count(), 
+            $Size, 
+            $Page,
+            ['path' => url('/tempat-wisata')]
+        );
+
+        // ->forPage($Page, $Size)
+
+        // echo json_encode($DataTaman);
+
+        return view('wisata/index', [
+            'data_taman' => $DataTaman,
+            'DataSL' => $DataSL,
+            'HighPrice' => $HighPrice,
+            'LowPrice' => $LowPrice,
+        ]);
     }
 
     public function detail(Request $request, $id) {
@@ -153,4 +174,36 @@ $DataTaman = DB::table('taman_wisata')
     ->simplePaginate(20);
 
 echo json_encode($DataTaman);
+
+SELECT * FROM taman_wisata tw1
+    WHERE ( 
+        tw1.title LIKE '%%'
+        OR tw1.excerpt LIKE '%%'
+        OR tw1.description LIKE '%%'
+    )
+    AND tw1.rating LIKE '%%'
+    AND tw1.simple_location LIKE '%nusantara%'
+    AND tw1.latitude LIKE '%%'
+    AND tw1.longitude LIKE '%%'
+    AND tw1.price > 0
+    AND tw1.price < 50000
+    AND NOT EXISTS (
+        SELECT  * FROM taman_wisata tw2
+        WHERE (
+            tw2.title LIKE '%%'
+            OR tw1.excerpt LIKE '%%'
+            OR tw1.description LIKE '%%'
+        )
+        AND tw2.rating LIKE '%%'
+        AND tw2.simple_location LIKE '%nusantara%'
+        AND tw2.latitude LIKE '%%'
+        AND tw2.longitude LIKE '%%'
+        AND tw2.price >= tw1.price
+        AND tw2.price <= tw1.price
+        AND ( 
+            tw2.price < tw1.price 
+            OR tw2.price > tw1.price
+        )
+    )
+
 */
