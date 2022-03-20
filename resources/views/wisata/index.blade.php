@@ -92,7 +92,7 @@
                     <form class="col-md-12 d-flex justify-center d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <!-- <div class="row wrapper-search"> -->
                             <div class="row input-group mb-3">
-                                <input class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                <input id="query" class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="col-1 input-group-append">
                                     <button class="btn btn-primary" type="submit" id="search-btn">
                                         <i class="fas fa-search fa-sm"></i>
@@ -104,7 +104,7 @@
                                     <div class="row">
                                         <label for="rating" class="form-label col-3">Rating : </label>
                                         <div class="col-9">
-                                            <select name="rating" class="form-control w-100">
+                                            <select id="rating" name="rating" class="form-control w-100">
                                                 <option value="">default</option>
                                                 <option value="sangat bagus">sangat bagus</option>
                                                 <option value="bagus">bagus</option>
@@ -119,7 +119,7 @@
                                     <div class="row">
                                         <label for="location" class="form-label col-4">Location : </label>
                                         <div class="col-8">
-                                            <select name="location" class="form-control w-100">
+                                            <select id="location" name="location" class="form-control w-100">
                                                 <option value="">default</option>
                                                 @foreach($DataSL as $simple_location)
                                                     <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
@@ -132,7 +132,7 @@
                                     <div class="row">
                                         <label for="sort-by" class="form-label col-3">sort-by : </label>
                                         <div class="col-9">
-                                            <select name="sort-by" class="form-control w-100">
+                                            <select id="sort-by" name="sort-by" class="form-control w-100">
                                                 <option value="">default</option>
                                                 <option value="{{ $HighPrice }}">harga tertinggi</option>
                                                 <option value="{{ $LowPrice }}">harga terendah</option>
@@ -145,7 +145,7 @@
                                     <div class="row">
                                         <label for="price-min" class="form-label col-3">price min : </label>
                                         <div class="col-9">
-                                            <input class="form-control w-100" id="price-min" type="numbv" name="price-min" placeholder="price min">
+                                            <input id="price-min" class="form-control w-100" id="price-min" type="numbv" name="price-min" placeholder="price min">
                                         </div>
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@
                                     <div class="row">
                                         <label for="price-max" class="form-label col-3">price max : </label>
                                         <div class="col-9">
-                                            <input class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
+                                            <input id="price-max" class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
                                         </div>
                                     </div>
                                 </div>
@@ -208,6 +208,19 @@
     </div>
 
     <script>
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const QueryParams = Object.fromEntries(urlSearchParams.entries());
+
+        if ( QueryParams != {} ) {
+            console.log(QueryParams)
+            $("#query").val(QueryParams['query'])
+            $("#price-min").val(QueryParams['price-min'])
+            $("#price-max").val(QueryParams['price-max'])
+            $("#rating").val(QueryParams['rating'])
+            $("#location").val(QueryParams['location'])
+        }
+
+
         const getCurrentLocation = () => {
             var getPosition = {
                 enableHighAccuracy: false,

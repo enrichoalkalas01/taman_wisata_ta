@@ -22,8 +22,9 @@ class taman_wisata extends Controller
         $Query = ($request->input('query') != NULL) || ($request->input('query') != '') ? $request->input('query') : '';
         $Rating = ($request->input('rating') != NULL) || ($request->input('rating') != '') != NULL ? $request->input('rating') : '';
         $Location = ($request->input('location') != NULL) || ($request->input('location') != '') ? $request->input('location') : '';
+        $PriceMin = ($request->input('price-min') != NULL) || ($request->input('price-min') != '') ? (int) $request->input('price-min') : 0;
+        $PriceMax = ($request->input('price-max') != NULL) || ($request->input('price-max') != '') ? (int) $request->input('price-max') : 10000000;
 
-        var_dump($Location);
         $QueryDataTaman = DB::select("
         SELECT * FROM taman_wisata tw1
             WHERE ( 
@@ -35,8 +36,8 @@ class taman_wisata extends Controller
             AND tw1.simple_location LIKE '%". $Location ."%'
             AND tw1.latitude LIKE '%%'
             AND tw1.longitude LIKE '%%'
-            AND tw1.price > 0
-            AND tw1.price < 50000
+            AND tw1.price > ". $PriceMin ."
+            AND tw1.price < ". $PriceMax ."
             AND NOT EXISTS (
                 SELECT  * FROM taman_wisata tw2
                 WHERE (
