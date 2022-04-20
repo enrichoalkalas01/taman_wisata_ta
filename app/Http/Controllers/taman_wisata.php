@@ -34,7 +34,7 @@ class taman_wisata extends Controller
                 OR tw1.excerpt LIKE '%". $Query ."%'
                 OR tw1.description LIKE '%". $Query ."%'
             )
-            AND tw1.rating LIKE '%". $Rating ."%'
+            AND tw1.rating LIKE '%". (int)$Rating ."%'
             AND tw1.simple_location LIKE '%". $Location ."%'
             AND tw1.latitude LIKE '%%'
             AND tw1.longitude LIKE '%%'
@@ -47,7 +47,7 @@ class taman_wisata extends Controller
                     OR tw1.excerpt LIKE '%". $Query ."%'
                     OR tw1.description LIKE '%". $Query ."%'
                 )
-                AND tw2.rating LIKE '%". $Rating ."%'
+                AND tw2.rating LIKE '%". (int)$Rating ."%'
                 AND tw2.simple_location LIKE '%". $Location ."%'
                 AND tw2.latitude LIKE '%%'
                 AND tw2.longitude LIKE '%%'
