@@ -24,6 +24,8 @@ class taman_wisata extends Controller
         $Location = ($request->input('location') != NULL) || ($request->input('location') != '') ? $request->input('location') : '';
         $PriceMin = ($request->input('price-min') != NULL) || ($request->input('price-min') != '') ? (int) $request->input('price-min') : 0;
         $PriceMax = ($request->input('price-max') != NULL) || ($request->input('price-max') != '') ? (int) $request->input('price-max') : 10000000;
+        $SortBy = ($request->input('sort-by') != NULL) || ($request->input('sort-by') != '') ? $request->input('sort-by') : '';
+        $Sort = ($request->input('sort') != NULL) || ($request->input('sort') != '') ? $request->input('sort') : '';
 
         $QueryDataTaman = DB::select("
         SELECT * FROM taman_wisata tw1
@@ -56,6 +58,7 @@ class taman_wisata extends Controller
                     OR tw2.price > tw1.price
                 )
             )
+            ORDER BY rating asc
         ");
 
         $Page = $request->input('page') ? (int)$request->input('page') : 1;
@@ -114,32 +117,32 @@ class taman_wisata extends Controller
 
     public function SeederDataTaman() {
         $Counted = 0;
-        for ( $i = 250; $i < 300; $i++ ) {
+        for ( $i = 0; $i < 250; $i++ ) {
             $models = new TamanModels;
             $models->users_id = 1;
             $models->title = 'Ini title ' . $i;
             
             if ( $i % 2 == 0 ) {
-                $models->rating = 'tidak bagus';
-                $models->simple_location = 'tiptop';
-                $models->latitude = '-6.403005609582511';
-                $models->longitude = '106.83529018425048';
-                $models->price = $i * 100;
-                // $models->simple_location = 'nusantara';
-                // $models->latitude = '-6.393724041022173';
-                // $models->longitude = '106.80834472294565';
-                // $models->price = $i * 2500;
+                $models->rating = 4;
+                // $models->simple_location = 'tiptop';
+                // $models->latitude = '-6.403005609582511';
+                // $models->longitude = '106.83529018425048';
+                // $models->price = $i * 100;
+                $models->simple_location = 'nusantara';
+                $models->latitude = '-6.393724041022173';
+                $models->longitude = '106.80834472294565';
+                $models->price = $i * 2500;
                 
             } else {
-                $models->rating = 'sangat tidak bagus';
-                $models->simple_location = 'jembatan serong';
-                $models->latitude = '-6.416864724604323';
-                $models->longitude = '1106.7967449977435'; 
-                $models->price = $i * 200;
-                // $models->simple_location = 'citayam';
-                // $models->latitude = '-6.448703561458972';
-                // $models->longitude = '106.80243443934127';
-                // $models->price = $i * 1500;
+                $models->rating = 2;
+                // $models->simple_location = 'jembatan serong';
+                // $models->latitude = '-6.416864724604323';
+                // $models->longitude = '1106.7967449977435'; 
+                // $models->price = $i * 200;
+                $models->simple_location = 'citayam';
+                $models->latitude = '-6.448703561458972';
+                $models->longitude = '106.80243443934127';
+                $models->price = $i * 1500;
             }
             
             $models->thumbnail = '';

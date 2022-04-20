@@ -92,11 +92,11 @@
                                 <label for="rating" class="form-label">rating</label>
                                 <div class="mb-3">
                                     <select value="{{ $data_taman->rating }}" name="rating" class="form-control mr-2 col-md-12 col-sm-12">
-                                        <option value="sangat bagus">sangat bagus</option>
-                                        <option value="bagus">bagus</option>
-                                        <option value="normal">normal</option>
-                                        <option value="tidak bagus">tidak bagus</option>
-                                        <option value="sangat tidak bagus">sangat tidak bagus</option>
+                                        <option value="5">sangat bagus</option>
+                                        <option value="4">bagus</option>
+                                        <option value="3">normal</option>
+                                        <option value="2">tidak bagus</option>
+                                        <option value="1">sangat tidak bagus</option>
                                     </select>
                                 </div>
                             </div>

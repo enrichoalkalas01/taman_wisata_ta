@@ -106,11 +106,11 @@
                                         <div class="col-9">
                                             <select id="rating" name="rating" class="form-control w-100">
                                                 <option value="">default</option>
-                                                <option value="sangat bagus">sangat bagus</option>
-                                                <option value="bagus">bagus</option>
-                                                <option value="normal">normal</option>
-                                                <option value="tidak bagus">tidak bagus</option>
-                                                <option value="sangat tidak bagus">sangat tidak bagus</option>
+                                                <option value="5">sangat bagus</option>
+                                                <option value="4">bagus</option>
+                                                <option value="3">normal</option>
+                                                <option value="2">tidak bagus</option>
+                                                <option value="1">sangat tidak bagus</option>
                                             </select>
                                         </div>
                                     </div>
@@ -124,18 +124,6 @@
                                                 @foreach($DataSL as $simple_location)
                                                     <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="sort-by" class="form-label col-3">sort-by : </label>
-                                        <div class="col-9">
-                                            <select id="sort-by" name="sort-by" class="form-control w-100">
-                                                <option value="">default</option>
-                                                <option value="{{ $HighPrice }}">harga tertinggi</option>
-                                                <option value="{{ $LowPrice }}">harga terendah</option>
                                             </select>
                                         </div>
                                     </div>
@@ -155,6 +143,31 @@
                                         <label for="price-max" class="form-label col-3">price max : </label>
                                         <div class="col-9">
                                             <input id="price-max" class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="sort-by" class="form-label col-3">sort-by : </label>
+                                        <div class="col-9">
+                                            <select id="sort-by" name="sort-by" class="form-control w-100">
+                                                <option value="price">price</option>
+                                                <option value="location">location</option>
+                                                <option value="rating">rating</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
+                                        <label for="sort" class="form-label col-3">sort : </label>
+                                        <div class="col-9">
+                                            <select id="sort" name="sort" class="form-control w-100">
+                                                <option value="ASC">Ascending</option>
+                                                <option value="DESC">Descending</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -186,6 +199,14 @@
                                         <p class="card-text">
                                             {{ $dt->excerpt }}
                                         </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <small class="text-muted">Rp. {{ $dt->price }}</small>
+                                                <!-- <div class="btn-group">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                                </div> -->
+                                            <!-- <small class="text-muted">{{ $dt->created_at }}</small> -->
+                                        </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <small class="text-muted">{{ $dt->simple_location }}</small>
                                                 <!-- <div class="btn-group">

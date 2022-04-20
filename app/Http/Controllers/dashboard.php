@@ -96,7 +96,7 @@ class dashboard extends Controller
             $model->users_id = $UserId;
             $model->title = $_POST["title"];
             $model->thumbnail = $newNameThumbnail;
-            $model->rating = $_POST['rating'];
+            $model->rating = (int)$_POST['rating'];
             $model->price = $_POST['price'];
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
@@ -285,7 +285,7 @@ class dashboard extends Controller
         $model = taman_wisata::where('id', $_POST['taman_id'])->get()->first();
         
         $model->title = $_POST["title"];
-        $model->rating = $_POST["rating"];
+        $model->rating = (int)$_POST["rating"];
         $model->excerpt = $_POST["excerpt"];
         $model->simple_location = $_POST["simple_location"];
         $model->latitude = $_POST["latitude"];
