@@ -108,7 +108,7 @@
                                                 <option value="">default</option>
                                                 <option value="5">sangat bagus</option>
                                                 <option value="4">bagus</option>
-                                                <option value="3">normal</option>
+                                                <!-- <option value="3">normal</option> -->
                                                 <option value="2">tidak bagus</option>
                                                 <option value="1">sangat tidak bagus</option>
                                             </select>

@@ -94,7 +94,7 @@
                                     <select value="{{ $data_taman->rating }}" name="rating" class="form-control mr-2 col-md-12 col-sm-12">
                                         <option value="5">sangat bagus</option>
                                         <option value="4">bagus</option>
-                                        <option value="3">normal</option>
+                                        <!-- <option value="3">normal</option> -->
                                         <option value="2">tidak bagus</option>
                                         <option value="1">sangat tidak bagus</option>
                                     </select>
