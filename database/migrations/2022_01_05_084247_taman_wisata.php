@@ -16,14 +16,14 @@ class TamanWisata extends Migration
         Schema::create('taman_wisata', function(Blueprint $table) {
             $table->increments('id');
             $table->integer('users_id')->nullable();
-            $table->integer('price')->nullable();
+            $table->double('price')->nullable();
             $table->string('title')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('simple_location')->nullable();
             $table->string('excerpt')->nullable();
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
-            $table->integer('rating')->nullable();
+            $table->double('rating')->nullable();
             $table->text('description')->nullable();
             $table->text('maps')->nullable();
             $table->timestamps();
