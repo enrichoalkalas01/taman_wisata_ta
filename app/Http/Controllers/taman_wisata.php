@@ -26,7 +26,7 @@ class taman_wisata extends Controller
         $PriceMax = ($request->input('price-max') != NULL) || ($request->input('price-max') != '') ? (int) $request->input('price-max') : 10000000;
         $SortBy = ($request->input('sort-by') != NULL) || ($request->input('sort-by') != '') ? $request->input('sort-by') : '';
         $Sort = ($request->input('sort') != NULL) || ($request->input('sort') != '') ? $request->input('sort') : '';
-
+        $Jarak = ($request->input('jarak') != NULL) || ($request->input('jarak') != '') ? $request->input('jarak') : 0;
         $QueryDataTaman = DB::select("
         SELECT * FROM taman_wisata tw1
             WHERE ( 
@@ -34,7 +34,8 @@ class taman_wisata extends Controller
                 OR tw1.excerpt LIKE '%". $Query ."%'
                 OR tw1.description LIKE '%". $Query ."%'
             )
-            AND tw1.rating LIKE '%". (int)$Rating ."%'
+            AND tw1.rating LIKE '%". $Rating ."%'
+            AND tw1.jarak >= ". (int)$Jarak ."
             AND tw1.simple_location LIKE '%". $Location ."%'
             AND tw1.latitude LIKE '%%'
             AND tw1.longitude LIKE '%%'
@@ -47,7 +48,8 @@ class taman_wisata extends Controller
                     OR tw1.excerpt LIKE '%". $Query ."%'
                     OR tw1.description LIKE '%". $Query ."%'
                 )
-                AND tw2.rating LIKE '%". (int)$Rating ."%'
+                AND tw2.rating LIKE '%". $Rating ."%'
+                AND tw2.jarak >= ". (int)$Jarak ."
                 AND tw2.simple_location LIKE '%". $Location ."%'
                 AND tw2.latitude LIKE '%%'
                 AND tw2.longitude LIKE '%%'
@@ -71,6 +73,8 @@ class taman_wisata extends Controller
             $Page,
             ['path' => url('/tempat-wisata')]
         );
+
+        // return json_encode($DataTaman);
 
         // ->forPage($Page, $Size)
 
@@ -124,6 +128,7 @@ class taman_wisata extends Controller
             
             if ( $i % 2 == 0 ) {
                 $models->rating = 4;
+                $models->jarak = 0;
                 // $models->simple_location = 'tiptop';
                 // $models->latitude = '-6.403005609582511';
                 // $models->longitude = '106.83529018425048';
@@ -135,6 +140,7 @@ class taman_wisata extends Controller
                 
             } else {
                 $models->rating = 2;
+                $models->jarak = 0;
                 // $models->simple_location = 'jembatan serong';
                 // $models->latitude = '-6.416864724604323';
                 // $models->longitude = '1106.7967449977435'; 
@@ -210,4 +216,38 @@ SELECT * FROM taman_wisata tw1
         )
     )
 
+
+    SELECT * FROM taman_wisata tw1
+        WHERE ( 
+            tw1.title LIKE '%%'
+            OR tw1.excerpt LIKE '%%'
+            OR tw1.description LIKE '%%'
+        )
+        AND tw1.rating LIKE '%%'
+        AND tw1.jarak >= 0
+        AND tw1.simple_location LIKE '%%'
+        AND tw1.latitude LIKE '%%'
+        AND tw1.longitude LIKE '%%'
+        AND tw1.price > 0
+        AND tw1.price < 50000
+        AND NOT EXISTS (
+            SELECT  * FROM taman_wisata tw2
+            WHERE (
+                tw2.title LIKE '%%'
+                OR tw1.excerpt LIKE '%%'
+                OR tw1.description LIKE '%%'
+            )
+            AND tw2.rating LIKE '%%'
+            AND tw2.jarak >= 0
+            AND tw2.simple_location LIKE '%%'
+            AND tw2.latitude LIKE '%%'
+            AND tw2.longitude LIKE '%%'
+            AND tw2.price >= tw1.price
+            AND tw2.price <= tw1.price
+            AND ( 
+                tw2.price < tw1.price 
+                OR tw2.price > tw1.price
+            )
+        )
+        ORDER BY rating asc
 */

@@ -27,6 +27,6 @@ class SimpleLocation extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('simple_location');
     }
 }

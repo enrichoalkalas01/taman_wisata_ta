@@ -15,6 +15,7 @@ class taman_wisata extends Model
         'users_id',
         'title',
         'rating',
+        'jarak',
         'thumbnail',
         'simple_location',
         'excerpt',

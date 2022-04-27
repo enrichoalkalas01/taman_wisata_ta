@@ -97,6 +97,7 @@ class dashboard extends Controller
             $model->title = $_POST["title"];
             $model->thumbnail = $newNameThumbnail;
             $model->rating = (int)$_POST['rating'];
+            $model->jarak = (int)$_POST['jarak'];
             $model->price = $_POST['price'];
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
@@ -110,6 +111,7 @@ class dashboard extends Controller
             $model->title = $_POST["title"];
             $model->thumbnail = null;
             $model->rating = null;
+            $model->jarak = 0;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
             $model->latitude = $_POST["latitude"];
@@ -286,6 +288,7 @@ class dashboard extends Controller
         
         $model->title = $_POST["title"];
         $model->rating = (int)$_POST["rating"];
+        $model->jarak = (int)$_POST["jarak"];
         $model->excerpt = $_POST["excerpt"];
         $model->simple_location = $_POST["simple_location"];
         $model->latitude = $_POST["latitude"];

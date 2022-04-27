@@ -149,6 +149,15 @@
 
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="row">
+                                        <label for="jarak" class="form-label col-3">jarak : </label>
+                                        <div class="col-9">
+                                            <input id="jarak" class="form-control w-100" id="jarak" type="numbv" name="jarak" placeholder="jarak">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="row">
                                         <label for="sort-by" class="form-label col-3">sort-by : </label>
                                         <div class="col-9">
                                             <select id="sort-by" name="sort-by" class="form-control w-100">
