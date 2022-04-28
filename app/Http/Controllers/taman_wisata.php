@@ -26,7 +26,8 @@ class taman_wisata extends Controller
         $PriceMax = ($request->input('price-max') != NULL) || ($request->input('price-max') != '') ? (int) $request->input('price-max') : 10000000;
         $SortBy = ($request->input('sort-by') != NULL) || ($request->input('sort-by') != '') ? $request->input('sort-by') : '';
         $Sort = ($request->input('sort') != NULL) || ($request->input('sort') != '') ? $request->input('sort') : '';
-        $Jarak = ($request->input('jarak') != NULL) || ($request->input('jarak') != '') ? $request->input('jarak') : 0;
+        $JarakFrom = ($request->input('jarak-from') != NULL) || ($request->input('jarak-from') != '') ? $request->input('jarak-from') : 0;
+        $JarakTo = ($request->input('jarak-to') != NULL) || ($request->input('jarak-to') != '') ? $request->input('jarak-to') : 0;
         $QueryDataTaman = DB::select("
         SELECT * FROM taman_wisata tw1
             WHERE ( 
@@ -35,7 +36,8 @@ class taman_wisata extends Controller
                 OR tw1.description LIKE '%". $Query ."%'
             )
             AND tw1.rating LIKE '%". $Rating ."%'
-            AND tw1.jarak >= ". (int)$Jarak ."
+            AND tw1.jarak >= ". (int)$JarakFrom ."
+            AND tw1.jarak <= ". (int)$JarakTo ."
             AND tw1.simple_location LIKE '%". $Location ."%'
             AND tw1.latitude LIKE '%%'
             AND tw1.longitude LIKE '%%'
@@ -49,7 +51,8 @@ class taman_wisata extends Controller
                     OR tw1.description LIKE '%". $Query ."%'
                 )
                 AND tw2.rating LIKE '%". $Rating ."%'
-                AND tw2.jarak >= ". (int)$Jarak ."
+                AND tw2.jarak >= ". (int)$JarakFrom ."
+                AND tw2.jarak <= ". (int)$JarakTo ."
                 AND tw2.simple_location LIKE '%". $Location ."%'
                 AND tw2.latitude LIKE '%%'
                 AND tw2.longitude LIKE '%%'
@@ -58,6 +61,9 @@ class taman_wisata extends Controller
                 AND ( 
                     tw2.price < tw1.price 
                     OR tw2.price > tw1.price
+                    OR tw2.rating < tw1.rating
+                    OR tw2.jarak < tw1.jarak
+                    OR tw2.jarak > tw1.jarak
                 )
             )
             ORDER BY rating asc
@@ -247,6 +253,42 @@ SELECT * FROM taman_wisata tw1
             AND ( 
                 tw2.price < tw1.price 
                 OR tw2.price > tw1.price
+            )
+        )
+        ORDER BY rating asc
+
+    SELECT * FROM taman_wisata tw1
+        WHERE ( 
+            tw1.title LIKE '%%'
+            OR tw1.excerpt LIKE '%%'
+            OR tw1.description LIKE '%%'
+        )
+        AND tw1.rating LIKE '%%'
+        AND tw1.jarak < 1
+        AND tw1.simple_location LIKE '%%'
+        AND tw1.latitude LIKE '%%'
+        AND tw1.longitude LIKE '%%'
+        AND tw1.price > 0
+        AND tw1.price < 50000
+        AND NOT EXISTS (
+            SELECT  * FROM taman_wisata tw2
+            WHERE (
+                tw2.title LIKE '%%'
+                OR tw1.excerpt LIKE '%%'
+                OR tw1.description LIKE '%%'
+            )
+            AND tw2.rating <= tw1.rating
+            AND tw2.jarak <= tw1.jarak
+            AND tw2.simple_location LIKE '%%'
+            AND tw2.latitude LIKE '%%'
+            AND tw2.longitude LIKE '%%'
+            AND tw2.price >= tw1.price
+            AND tw2.price <= tw1.price
+            AND ( 
+                tw2.price < tw1.price 
+                OR tw2.price > tw1.price 
+                OR tw2.rating < tw1.rating
+                OR tw2.jarak < tw1.jarak
             )
         )
         ORDER BY rating asc

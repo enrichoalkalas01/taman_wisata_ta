@@ -150,8 +150,11 @@
                                 <div class="col-12 col-md-6 col-lg-4">
                                     <div class="row">
                                         <label for="jarak" class="form-label col-3">jarak : </label>
-                                        <div class="col-9">
-                                            <input id="jarak" class="form-control w-100" id="jarak" type="numbv" name="jarak" placeholder="jarak">
+                                        <div class="col">
+                                            <input id="jarak-from" class="form-control w-100" id="jarak-from" type="numbv" name="jarak-from" placeholder="jarak-from">
+                                        </div>
+                                        <div class="col">
+                                            <input id="jarak-to" class="form-control w-100" id="jarak-to" type="numbv" name="jarak-to" placeholder="jarak-to">
                                         </div>
                                     </div>
                                 </div>
