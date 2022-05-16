@@ -68,6 +68,8 @@ class dashboard extends Controller
         $status_images = false;
         $status_images_link = false;
 
+        var_dump(floatval($_POST["jarak"]));
+
         // Checking The Images Status
         foreach($_POST as $key => $value) {
             if ( $key == 'imageslink') {
@@ -97,8 +99,8 @@ class dashboard extends Controller
             $model->title = $_POST["title"];
             $model->thumbnail = $newNameThumbnail;
             $model->rating = (int)$_POST['rating'];
-            $model->jarak = floatval($_POST['jarak']);
-            $model->price = $_POST['price'];
+            $model->jarak = floatval($_POST["jarak"]);
+            $model->price = ($_POST['price'] !== '' && $_POST['price'] > 0 && $_POST['price'] !== null ) ? $_POST['price'] : 0;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
             $model->latitude = $_POST["latitude"];
@@ -288,7 +290,7 @@ class dashboard extends Controller
         
         $model->title = $_POST["title"];
         $model->rating = (int)$_POST["rating"];
-        $model->jarak = floatval($_POST["jarak"]);
+        $model->jarak = (float)$_POST["jarak"];
         $model->excerpt = $_POST["excerpt"];
         $model->simple_location = $_POST["simple_location"];
         $model->latitude = $_POST["latitude"];

@@ -92,7 +92,7 @@
                         <div class="form-group">
                             <div class="mb-3">
                                 <label for="jarak" class="form-label">jarak</label>
-                                <input type="text" name="jarak" class="form-control" id="jarak" placeholder="input your jarak here..">
+                                <input type="number" step="0.1" name="jarak" class="form-control" id="jarak" placeholder="input your jarak here..">
                             </div>
                         </div>
                         <div class="form-group">

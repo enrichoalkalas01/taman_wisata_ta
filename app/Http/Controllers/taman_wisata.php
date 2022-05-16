@@ -20,53 +20,53 @@ class taman_wisata extends Controller
         $LowPrice = TamanModels::min('price');
         $HighPrice = TamanModels::max('price');
         $Query = ($request->input('query') != NULL) || ($request->input('query') != '') ? $request->input('query') : '';
-        $Rating = ($request->input('rating') != NULL) || ($request->input('rating') != '') != NULL ? $request->input('rating') : '';
+        $Rating = ($request->input('rating') != NULL) || ($request->input('rating') != '') != NULL ? $request->input('rating') : 5;
         $Location = ($request->input('location') != NULL) || ($request->input('location') != '') ? $request->input('location') : '';
         $PriceMin = ($request->input('price-min') != NULL) || ($request->input('price-min') != '') ? (int) $request->input('price-min') : 0;
         $PriceMax = ($request->input('price-max') != NULL) || ($request->input('price-max') != '') ? (int) $request->input('price-max') : 10000000;
         $SortBy = ($request->input('sort-by') != NULL) || ($request->input('sort-by') != '') ? $request->input('sort-by') : '';
         $Sort = ($request->input('sort') != NULL) || ($request->input('sort') != '') ? $request->input('sort') : '';
         $JarakFrom = ($request->input('jarak-from') != NULL) || ($request->input('jarak-from') != '') ? $request->input('jarak-from') : 0;
-        $JarakTo = ($request->input('jarak-to') != NULL) || ($request->input('jarak-to') != '') ? $request->input('jarak-to') : 0;
+        $JarakTo = ($request->input('jarak-to') != NULL) || ($request->input('jarak-to') != '') ? $request->input('jarak-to') : 10000000;
         $QueryDataTaman = DB::select("
-        SELECT * FROM taman_wisata tw1
-            WHERE ( 
-                tw1.title LIKE '%". $Query ."%'
-                OR tw1.excerpt LIKE '%". $Query ."%'
-                OR tw1.description LIKE '%". $Query ."%'
-            )
-            AND tw1.rating LIKE '%". $Rating ."%'
-            AND tw1.jarak >= ". (int)$JarakFrom ."
-            AND tw1.jarak <= ". (int)$JarakTo ."
-            AND tw1.simple_location LIKE '%". $Location ."%'
-            AND tw1.latitude LIKE '%%'
-            AND tw1.longitude LIKE '%%'
-            AND tw1.price > ". $PriceMin ."
-            AND tw1.price < ". $PriceMax ."
-            AND NOT EXISTS (
-                SELECT  * FROM taman_wisata tw2
-                WHERE (
-                    tw2.title LIKE '%". $Query ."%'
+            SELECT * FROM taman_wisata tw1
+                WHERE ( 
+                    tw1.title LIKE '%". $Query ."%'
                     OR tw1.excerpt LIKE '%". $Query ."%'
                     OR tw1.description LIKE '%". $Query ."%'
                 )
-                AND tw2.rating LIKE '%". $Rating ."%'
-                AND tw2.jarak >= ". (int)$JarakFrom ."
-                AND tw2.jarak <= ". (int)$JarakTo ."
-                AND tw2.simple_location LIKE '%". $Location ."%'
-                AND tw2.latitude LIKE '%%'
-                AND tw2.longitude LIKE '%%'
-                AND tw2.price >= tw1.price
-                AND tw2.price <= tw1.price
-                AND ( 
-                    tw2.price < tw1.price 
-                    OR tw2.price > tw1.price
-                    OR tw2.rating < tw1.rating
-                    OR tw2.jarak < tw1.jarak
-                    OR tw2.jarak > tw1.jarak
+                AND tw1.rating <= ". $Rating ."
+                AND tw1.jarak >= ". $JarakFrom ."
+                AND tw1.jarak <= ". $JarakTo ."
+                AND tw1.simple_location LIKE '%". $Location ."%'
+                AND tw1.latitude LIKE '%%'
+                AND tw1.longitude LIKE '%%'
+                AND tw1.price >= ". $PriceMin ."
+                AND tw1.price <= ". $PriceMax ."
+                AND NOT EXISTS (
+                    SELECT  * FROM taman_wisata tw2
+                    WHERE (
+                        tw2.title LIKE '%". $Query ."%'
+                        OR tw1.excerpt LIKE '%". $Query ."%'
+                        OR tw1.description LIKE '%". $Query ."%'
+                    )
+                    AND tw2.rating <= tw1.rating
+                    AND tw2.jarak >= tw1.jarak
+                    AND tw2.jarak <= tw1.jarak
+                    AND tw2.simple_location LIKE '%". $Location ."%'
+                    AND tw2.latitude LIKE '%%'
+                    AND tw2.longitude LIKE '%%'
+                    AND tw2.price >= tw1.price
+                    AND tw2.price <= tw1.price
+                    AND ( 
+                        tw2.price < tw1.price 
+                        OR tw2.price > tw1.price 
+                        OR tw2.rating < tw1.rating
+                        OR tw2.jarak < tw1.jarak
+                        OR tw2.jarak > tw1.jarak
+                    )
                 )
-            )
-            ORDER BY rating asc
+                ORDER BY rating asc
         ");
 
         $Page = $request->input('page') ? (int)$request->input('page') : 1;
