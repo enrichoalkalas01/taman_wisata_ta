@@ -159,7 +159,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-12 col-md-6 col-lg-4">
+                                <!-- <div class="col-12 col-md-6 col-lg-4">
                                     <div class="row">
                                         <label for="sort-by" class="form-label col-3">sort-by : </label>
                                         <div class="col-9">
@@ -170,9 +170,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
 
-                                <div class="col-12 col-md-6 col-lg-4">
+                                <!-- <div class="col-12 col-md-6 col-lg-4">
                                     <div class="row">
                                         <label for="sort" class="form-label col-3">sort : </label>
                                         <div class="col-9">
@@ -182,7 +182,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         <!-- </div> -->
                     </form>
