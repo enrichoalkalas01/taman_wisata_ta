@@ -35,20 +35,20 @@ class taman_wisata extends Controller
                     OR tw1.excerpt LIKE '%". $Query ."%'
                     OR tw1.description LIKE '%". $Query ."%'
                 )
-                AND tw1.rating <= ". $Rating ."
-                AND tw1.jarak >= ". $JarakFrom ."
-                AND tw1.jarak <= ". $JarakTo ."
+                AND tw1.rating <= ". (int)$Rating ."
+                AND tw1.jarak >= ". (int)$JarakFrom ."
+                AND tw1.jarak <= ". (int)$JarakTo ."
                 AND tw1.simple_location LIKE '%". $Location ."%'
                 AND tw1.latitude LIKE '%%'
                 AND tw1.longitude LIKE '%%'
-                AND tw1.price >= ". $PriceMin ."
-                AND tw1.price <= ". $PriceMax ."
+                AND tw1.price >= ". (int)$PriceMin ."
+                AND tw1.price <= ". (int)$PriceMax ."
                 AND NOT EXISTS (
                     SELECT  * FROM taman_wisata tw2
                     WHERE (
                         tw2.title LIKE '%". $Query ."%'
-                        OR tw1.excerpt LIKE '%". $Query ."%'
-                        OR tw1.description LIKE '%". $Query ."%'
+                        OR tw2.excerpt LIKE '%". $Query ."%'
+                        OR tw2.description LIKE '%". $Query ."%'
                     )
                     AND tw2.rating <= tw1.rating
                     AND tw2.jarak >= tw1.jarak
@@ -60,13 +60,11 @@ class taman_wisata extends Controller
                     AND tw2.price <= tw1.price
                     AND ( 
                         tw2.price < tw1.price 
-                        OR tw2.price > tw1.price 
-                        OR tw2.rating < tw1.rating
+                        OR tw2.price > tw1.price
                         OR tw2.jarak < tw1.jarak
                         OR tw2.jarak > tw1.jarak
                     )
                 )
-                ORDER BY rating asc
         ");
 
         $Page = $request->input('page') ? (int)$request->input('page') : 1;
@@ -234,15 +232,15 @@ SELECT * FROM taman_wisata tw1
         AND tw1.simple_location LIKE '%%'
         AND tw1.latitude LIKE '%%'
         AND tw1.longitude LIKE '%%'
-        AND tw1.price > 0
-        AND tw1.price < 50000
+        AND tw1.price >= 0
+        AND tw1.price <= 50000
         AND NOT EXISTS (
             SELECT  * FROM taman_wisata tw2
-            WHERE (
-                tw2.title LIKE '%%'
-                OR tw1.excerpt LIKE '%%'
-                OR tw1.description LIKE '%%'
-            )
+                WHERE (
+                    tw2.title LIKE '%%'
+                    OR tw1.excerpt LIKE '%%'
+                    OR tw1.description LIKE '%%'
+                )
             AND tw2.rating LIKE '%%'
             AND tw2.jarak >= 0
             AND tw2.simple_location LIKE '%%'
@@ -263,25 +261,26 @@ SELECT * FROM taman_wisata tw1
             OR tw1.excerpt LIKE '%%'
             OR tw1.description LIKE '%%'
         )
-        AND tw1.rating LIKE '%%'
-        AND tw1.jarak < 1
+        AND tw1.rating <= 5
+        AND tw1.jarak >= 0
+        AND tw1.jarak <= 10000000
         AND tw1.simple_location LIKE '%%'
         AND tw1.latitude LIKE '%%'
         AND tw1.longitude LIKE '%%'
-        AND tw1.price > 0
-        AND tw1.price < 50000
+        AND tw1.price >= 0
+        AND tw1.price <= 50000
         AND NOT EXISTS (
             SELECT  * FROM taman_wisata tw2
             WHERE (
-                tw2.title LIKE '%%'
-                OR tw1.excerpt LIKE '%%'
-                OR tw1.description LIKE '%%'
+                tw2.title LIKE tw1.title
+                OR tw2.excerpt LIKE tw1.excerpt
+                OR tw2.description LIKE tw1.description
             )
             AND tw2.rating <= tw1.rating
             AND tw2.jarak <= tw1.jarak
-            AND tw2.simple_location LIKE '%%'
-            AND tw2.latitude LIKE '%%'
-            AND tw2.longitude LIKE '%%'
+            AND tw2.simple_location LIKE tw1.simple_location
+            AND tw2.latitude LIKE tw1.latitude
+            AND tw2.longitude LIKE tw1.longitude
             AND tw2.price >= tw1.price
             AND tw2.price <= tw1.price
             AND ( 

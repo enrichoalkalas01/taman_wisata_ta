@@ -64,6 +64,7 @@ class dashboard extends Controller
     }
 
     public function tamanWisataCreatePost(Request $request) {
+        // var_dump($_POST["rating"]);
         $UserId = Session::get('users')->id;
         $status_images = false;
         $status_images_link = false;
@@ -100,7 +101,7 @@ class dashboard extends Controller
             $model->thumbnail = $newNameThumbnail;
             $model->rating = (int)$_POST['rating'];
             $model->jarak = floatval($_POST["jarak"]);
-            $model->price = ($_POST['price'] !== '' && $_POST['price'] > 0 && $_POST['price'] !== null ) ? $_POST['price'] : 0;
+            $model->price = ($_POST["price"] !== '' && $_POST["price"] !== null && $_POST["price"] > 0 ) ? $_POST["price"] : 0;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
             $model->latitude = $_POST["latitude"];
@@ -112,8 +113,9 @@ class dashboard extends Controller
             $model->users_id = $UserId;
             $model->title = $_POST["title"];
             $model->thumbnail = null;
-            $model->rating = null;
-            $model->jarak = 0;
+            $model->rating = (int)$_POST['rating'];
+            $model->jarak = floatval($_POST["jarak"]);
+            $model->price = ($_POST["price"] !== '' && $_POST["price"] !== null && $_POST["price"] > 0 ) ? $_POST["price"] : 0;
             $model->simple_location = $_POST["simple_location"];
             $model->excerpt = $_POST["excerpt"];
             $model->latitude = $_POST["latitude"];
@@ -297,7 +299,7 @@ class dashboard extends Controller
         $model->longitude = $_POST["longitude"];
         $model->description = $_POST["description"];
         $model->maps = $_POST["maps"];
-        $model->price = $_POST["price"];
+        $model->price = ($_POST["price"] !== '' && $_POST["price"] !== null && $_POST["price"] > 0 ) ? $_POST["price"] : 0;
 
         $status_images = false;
         $status_images_link = false;
