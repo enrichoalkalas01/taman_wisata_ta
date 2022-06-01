@@ -144,13 +144,19 @@
             </div>
         </div> -->
         <div class="row">
-            @if( count($data_favourites) > 0 )
-                <div class="col-md-12 p-3 text-center">
-                    <a class="btn btn-danger" href="/remove-to-favourites/{{ $data_detail->id }}">Remove From Favourites</a>
-                </div>
+            @if( Session::get('users') != NULL ) 
+                @if( count($data_favourites) > 0 )
+                    <div class="col-md-12 p-3 text-center">
+                        <a class="btn btn-danger" href="/remove-to-favourites/{{ $data_detail->id }}">Remove From Favourites</a>
+                    </div>
+                @else
+                    <div class="col-md-12 p-3 text-center">
+                        <a class="btn btn-success" href="/add-to-favourites/{{ $data_detail->id }}">Add To Favourites</a>
+                    </div>
+                @endif
             @else
                 <div class="col-md-12 p-3 text-center">
-                    <a class="btn btn-success" href="/add-to-favourites/{{ $data_detail->id }}">Add To Favourites</a>
+                    <!-- <a class="btn btn-success" href="/login">Login to add favorite..</a> -->
                 </div>
             @endif
         </div>
