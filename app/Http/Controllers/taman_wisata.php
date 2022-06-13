@@ -28,44 +28,67 @@ class taman_wisata extends Controller
         $Sort = ($request->input('sort') != NULL) || ($request->input('sort') != '') ? $request->input('sort') : '';
         $JarakFrom = ($request->input('jarak-from') != NULL) || ($request->input('jarak-from') != '') ? $request->input('jarak-from') : 0;
         $JarakTo = ($request->input('jarak-to') != NULL) || ($request->input('jarak-to') != '') ? $request->input('jarak-to') : 10000000;
-        $QueryDataTaman = DB::select("
-            SELECT * FROM taman_wisata tw1
-                WHERE ( 
-                    tw1.title LIKE '%". $Query ."%'
-                    OR tw1.excerpt LIKE '%". $Query ."%'
-                    OR tw1.description LIKE '%". $Query ."%'
-                )
-                AND tw1.rating <= ". (int)$Rating ."
-                AND tw1.jarak >= ". (int)$JarakFrom ."
-                AND tw1.jarak <= ". (int)$JarakTo ."
-                AND tw1.simple_location LIKE '%". $Location ."%'
-                AND tw1.latitude LIKE '%%'
-                AND tw1.longitude LIKE '%%'
-                AND tw1.price >= ". (int)$PriceMin ."
-                AND tw1.price <= ". (int)$PriceMax ."
-                AND NOT EXISTS (
-                    SELECT  * FROM taman_wisata tw2
-                    WHERE (
-                        tw2.title LIKE '%". $Query ."%'
-                        OR tw2.excerpt LIKE '%". $Query ."%'
-                        OR tw2.description LIKE '%". $Query ."%'
+        $TypeButton = null;
+        foreach ($_GET as $value => $key) {
+            if ( $key === 'normal-search' ) $TypeButton = $key;
+            if ( $key === 'preverence' ) $TypeButton = $key;
+        }
+
+        if ( $TypeButton === 'normal-search' ) {
+            $QueryDataTaman = DB::select("
+                SELECT * FROM taman_wisata tw1
+                    WHERE ( 
+                        tw1.title LIKE '%". $Query ."%'
+                        OR tw1.excerpt LIKE '%". $Query ."%'
+                        OR tw1.description LIKE '%". $Query ."%'
                     )
-                    AND tw2.rating <= tw1.rating
-                    AND tw2.jarak >= tw1.jarak
-                    AND tw2.jarak <= tw1.jarak
-                    AND tw2.simple_location LIKE '%". $Location ."%'
-                    AND tw2.latitude LIKE '%%'
-                    AND tw2.longitude LIKE '%%'
-                    AND tw2.price >= tw1.price
-                    AND tw2.price <= tw1.price
-                    AND ( 
-                        tw2.price < tw1.price 
-                        OR tw2.price > tw1.price
-                        OR tw2.jarak < tw1.jarak
-                        OR tw2.jarak > tw1.jarak
+                    AND tw1.rating <= ". (int)$Rating ."
+                    AND tw1.jarak >= ". (int)$JarakFrom ."
+                    AND tw1.jarak <= ". (int)$JarakTo ."
+                    AND tw1.simple_location LIKE '%". $Location ."%'
+                    AND tw1.latitude LIKE '%%'
+                    AND tw1.longitude LIKE '%%'
+                    AND tw1.price >= ". (int)$PriceMin ."
+                    AND tw1.price <= ". (int)$PriceMax ."
+                    AND NOT EXISTS (
+                        SELECT  * FROM taman_wisata tw2
+                        WHERE (
+                            tw2.title LIKE '%". $Query ."%'
+                            OR tw2.excerpt LIKE '%". $Query ."%'
+                            OR tw2.description LIKE '%". $Query ."%'
+                        )
+                        AND tw2.rating <= tw1.rating
+                        AND tw2.jarak >= tw1.jarak
+                        AND tw2.jarak <= tw1.jarak
+                        AND tw2.simple_location LIKE '%". $Location ."%'
+                        AND tw2.latitude LIKE '%%'
+                        AND tw2.longitude LIKE '%%'
+                        AND tw2.price >= tw1.price
+                        AND tw2.price <= tw1.price
+                        AND ( 
+                            tw2.price < tw1.price 
+                            OR tw2.price > tw1.price
+                            OR tw2.jarak < tw1.jarak
+                            OR tw2.jarak > tw1.jarak
+                        )
+                    )
+            ");
+        } else {
+            $QueryDataTaman = `
+                SELECT id, price, title, simple_location, jarak, rating FROM taman_wisata c
+                WHERE c.simple_location = 'Cimanggis' AND NOT EXISTS
+                (
+                    SELECT id, price, title, simple_location, jarak, rating FROM taman_wisata c1
+                    WHERE c1.simple_location='Cimanggis' AND
+                    c1.price <= c.price and c1.rating
+                    <= c.rating AND (
+                        c1.price <
+                        c.price OR c1.rating <
+                        c.rating
                     )
                 )
-        ");
+            `;
+        }
 
         $Page = $request->input('page') ? (int)$request->input('page') : 1;
         $Size = 15;
@@ -77,12 +100,6 @@ class taman_wisata extends Controller
             $Page,
             ['path' => url('/tempat-wisata')]
         );
-
-        // return json_encode($DataTaman);
-
-        // ->forPage($Page, $Size)
-
-        // echo json_encode($DataTaman);
 
         return view('wisata/index', [
             'data_taman' => $DataTaman,

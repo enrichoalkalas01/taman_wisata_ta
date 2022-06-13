@@ -94,7 +94,7 @@
                             <div class="row input-group mb-3">
                                 <input id="query" class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="col-1 input-group-append">
-                                    <button class="btn btn-primary" type="submit" id="search-btn">
+                                    <button name="normal-search" class="btn btn-primary" type="submit" id="search-btn" value="normal-search">
                                         <i class="fas fa-search fa-sm"></i>
                                     </button>
                                 </div>
@@ -185,6 +185,12 @@
                                 </div> -->
                             </div>
                         <!-- </div> -->
+                    </form>
+                    <form>
+                        <input type="text" value="preference" name="preverence" style="display:none;">
+                        <button name="preverence" class="btn btn-primary" type="submit" id="preverence-btn" value="preverence">
+                            Preverence
+                        </button>
                     </form>
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
