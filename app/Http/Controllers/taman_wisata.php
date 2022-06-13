@@ -129,9 +129,9 @@ class taman_wisata extends Controller
             // ");
 
             $QueryDataTaman = DB::select("
-                SELECT id,price,title,simple_location,jarak,rating FROM taman_wisata c
+                SELECT * FROM taman_wisata c
                 WHERE c.simple_location = 'Pancoran Mas' AND NOT EXISTS
-                (SELECT id,price,title,simple_location,jarak,rating FROM taman_wisata c1
+                (SELECT * FROM taman_wisata c1
                 WHERE c1.simple_location='Pancoran Mas' AND
                 c1.price <= c.price and c1.rating
                 <= c.rating AND (c1.price <
