@@ -74,20 +74,20 @@ class taman_wisata extends Controller
                     )
             ");
         } else {
-            $QueryDataTaman = `
-                SELECT id, price, title, simple_location, jarak, rating FROM taman_wisata c
-                WHERE c.simple_location = 'Cimanggis' AND NOT EXISTS
-                (
-                    SELECT id, price, title, simple_location, jarak, rating FROM taman_wisata c1
-                    WHERE c1.simple_location='Cimanggis' AND
-                    c1.price <= c.price and c1.rating
-                    <= c.rating AND (
-                        c1.price <
-                        c.price OR c1.rating <
-                        c.rating
+            $QueryDataTaman = DB::select("
+                SELECT * FROM taman_wisata tw1
+                WHERE tw1.simple_location LIKE '%". $Location ."%'
+                AND NOT EXISTS (
+                    SELECT * FROM taman_wisata tw2
+                    WHERE tw2.simple_location LIKE '%". $Location ."%'
+                    AND tw2.price <= tw1.price
+                    AND tw2.rating <= tw1.rating
+                    AND (
+                        tw2.price < tw1.price
+                        OR tw2.rating < tw1.rating
                     )
                 )
-            `;
+            ");
         }
 
         $Page = $request->input('page') ? (int)$request->input('page') : 1;

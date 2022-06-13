@@ -186,8 +186,21 @@
                             </div>
                         <!-- </div> -->
                     </form>
-                    <form>
+                    <form class="col-12">
                         <input type="text" value="preference" name="preverence" style="display:none;">
+                        <div class="col-12 col-md-6 col-lg-4">
+                                <div class="row">
+                                    <label for="location" class="form-label col-4">Location : </label>
+                                    <div class="col-8">
+                                        <select id="location" name="location" class="form-control w-100">
+                                            <option value="">default</option>
+                                            @foreach($DataSL as $simple_location)
+                                                <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         <button name="preverence" class="btn btn-primary" type="submit" id="preverence-btn" value="preverence">
                             Preverence
                         </button>
