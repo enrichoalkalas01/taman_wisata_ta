@@ -114,10 +114,10 @@ class taman_wisata extends Controller
             ");
         } else {
             $QueryDataTaman = DB::select("
-                SELECT id, price, title, simple_location, jarak, thumbnail, excerpt, rating FROM taman_wisata tw1
+                SELECT id, price, title, simple_location, jarak, thumbnail, excerpt, created_at, rating FROM taman_wisata tw1
                 WHERE tw1.simple_location LIKE '%". $Location ."%'
                 AND NOT EXISTS (
-                    SELECT id, price, title, simple_location, jarak, thumbnail, excerpt, rating FROM taman_wisata tw2
+                    SELECT id, price, title, simple_location, jarak, thumbnail, excerpt, created_at, rating FROM taman_wisata tw2
                     WHERE tw2.simple_location LIKE '%". $Location ."%'
                     AND tw2.price <= tw1.price
                     AND tw2.rating <= tw1.rating
