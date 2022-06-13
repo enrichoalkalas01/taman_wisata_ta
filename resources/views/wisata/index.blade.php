@@ -232,18 +232,16 @@
                                         </p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <small class="text-muted">Rp. {{ $dt->price }}</small>
-                                                <!-- <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                                </div> -->
-                                            <!-- <small class="text-muted">{{ $dt->created_at }}</small> -->
+                                            @if($dt->rating == 5) <small class="text-muted">sangat bagus</small>
+                                            @elseif($dt->rating == 4) <small class="text-muted">bagus</small>
+                                            @elseif($dt->rating == 3) <small class="text-muted">normal</small>
+                                            @elseif($dt->rating == 2) <small class="text-muted">tidak bagus</small>
+                                            @elseif($dt->rating == 1) <small class="text-muted">sangat tidak bagus</small>
+                                            @else <small class="text-muted"></small>
+                                            @endif
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <small class="text-muted">{{ $dt->simple_location }}</small>
-                                                <!-- <div class="btn-group">
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                                </div> -->
                                             <small class="text-muted">{{ $dt->created_at }}</small>
                                         </div>
                                     </div>

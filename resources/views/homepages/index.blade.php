@@ -95,6 +95,16 @@
                                         {{ $data_taman[$i]->excerpt }}
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">Rp. {{ $data_taman[$i]->price }}</small>
+                                        @if($data_taman[$i]->rating == 5) <small class="text-muted">sangat bagus</small>
+                                        @elseif($data_taman[$i]->rating == 4) <small class="text-muted">bagus</small>
+                                        @elseif($data_taman[$i]->rating == 3) <small class="text-muted">normal</small>
+                                        @elseif($data_taman[$i]->rating == 2) <small class="text-muted">tidak bagus</small>
+                                        @elseif($data_taman[$i]->rating == 1) <small class="text-muted">sangat tidak bagus</small>
+                                        @else <small class="text-muted"></small>
+                                        @endif
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">{{ $data_taman[$i]->simple_location }}</small>
                                             <!-- <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
