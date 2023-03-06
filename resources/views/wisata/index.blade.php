@@ -90,121 +90,132 @@
                 </div>
                 <div class="row" style="padding: 2.5% 10%">
                     <form class="col-md-12 d-flex justify-center d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <!-- <div class="row wrapper-search"> -->
-                            <div class="row input-group mb-3">
-                                <input id="query" class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="col-1 input-group-append">
-                                    <button name="normal-search" class="btn btn-primary" type="submit" id="search-btn" value="normal-search">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
+                        <div class="row input-group mb-3">
+                            <input id="query" class="col-11" type="text" name="query" style="border: 1px solid #dedede !important;" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="col-1 input-group-append">
+                                <button name="normal-search" class="btn btn-primary" type="submit" id="search-btn" value="normal-search">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="rating" class="form-label col-3">Rating : </label>
-                                        <div class="col-9">
-                                            <select id="rating" name="rating" class="form-control w-100">
-                                                <option value="">default</option>
-                                                <option value="5">sangat bagus</option>
-                                                <option value="4">bagus</option>
-                                                <!-- <option value="3">normal</option> -->
-                                                <option value="2">tidak bagus</option>
-                                                <option value="1">sangat tidak bagus</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="location" class="form-label col-4">Location : </label>
-                                        <div class="col-8">
-                                            <select id="location" name="location" class="form-control w-100">
-                                                <option value="">default</option>
-                                                @foreach($DataSL as $simple_location)
-                                                    <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="price-min" class="form-label col-3">price min : </label>
-                                        <div class="col-9">
-                                            <input id="price-min" class="form-control w-100" id="price-min" type="numbv" name="price-min" placeholder="price min">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="price-max" class="form-label col-3">price max : </label>
-                                        <div class="col-9">
-                                            <input id="price-max" class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="jarak" class="form-label col-3">Jarak Kilometer: </label>
-                                        <div class="col">
-                                            <input id="jarak-from" class="form-control w-100" id="jarak-from" type="numbv" name="jarak-from" placeholder="jarak-from Km">
-                                        </div>
-                                        <div class="col">
-                                            <input id="jarak-to" class="form-control w-100" id="jarak-to" type="numbv" name="jarak-to" placeholder="jarak-to Km">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="sort-by" class="form-label col-3">sort-by : </label>
-                                        <div class="col-9">
-                                            <select id="sort-by" name="sort-by" class="form-control w-100">
-                                                <option value="price">price</option>
-                                                <option value="location">location</option>
-                                                <option value="rating">rating</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <!-- <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="row">
-                                        <label for="sort" class="form-label col-3">sort : </label>
-                                        <div class="col-9">
-                                            <select id="sort" name="sort" class="form-control w-100">
-                                                <option value="ASC">Ascending</option>
-                                                <option value="DESC">Descending</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> -->
-                            </div>
-                        <!-- </div> -->
-                    </form>
-                    <form class="col-12">
-                        <input type="text" value="preference" name="preverence" style="display:none;">
-                        <div class="col-12 col-md-6 col-lg-4">
+                        </div>
+                        <div class="row mb-12">
+                            <div class="col-12 card py-4">
                                 <div class="row">
-                                    <label for="location" class="form-label col-4">Location : </label>
-                                    <div class="col-8">
-                                        <select id="location" name="location" class="form-control w-100">
-                                            <option value="">default</option>
-                                            @foreach($DataSL as $simple_location)
-                                                <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <label for="rating" class="form-label col-1">Rating : </label>
+                                            <div class="col-11">
+                                                <select id="rating" name="rating" class="form-control w-100">
+                                                    <option value="">default</option>
+                                                    <option value="5">sangat bagus</option>
+                                                    <option value="4">bagus</option>
+                                                    <!-- <option value="3">normal</option> -->
+                                                    <option value="2">tidak bagus</option>
+                                                    <option value="1">sangat tidak bagus</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <label for="location" class="form-label col-1">Location : </label>
+                                            <div class="col-11">
+                                                <select id="location" name="location" class="form-control w-100">
+                                                    <option value="">default</option>
+                                                    @foreach($DataSL as $simple_location)
+                                                        <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <label for="price-min" class="form-label col-1">price min : </label>
+                                            <div class="col-11">
+                                                <input id="price-min" class="form-control w-100" id="price-min" type="numbv" name="price-min" placeholder="price min">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <label for="price-max" class="form-label col-1">price max : </label>
+                                            <div class="col-11">
+                                                <input id="price-max" class="form-control w-100" id="price-max" type="number" name="price-max" placeholder="price max">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-2">
+                                        <div class="row">
+                                            <label for="jarak" class="form-label col-2">Jarak Kilometer: </label>
+                                            <div class="col">
+                                                <input id="jarak-from" class="form-control w-100" id="jarak-from" type="numbv" name="jarak-from" placeholder="jarak-from Km">
+                                            </div>
+                                            <div class="col">
+                                                <input id="jarak-to" class="form-control w-100" id="jarak-to" type="numbv" name="jarak-to" placeholder="jarak-to Km">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mb-4">
+                                        <input type="text" value="preference" name="preverence" style="display:none;">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <label for="location" class="form-label col-2">Location : </label>
+                                                    <div class="col-10">
+                                                        <select id="location" name="location" class="form-control w-100">
+                                                            <option value="">default</option>
+                                                            @foreach($DataSL as $simple_location)
+                                                                <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button name="preverence" class="btn btn-primary w-100" type="submit" id="preverence-btn" value="preverence">
+                                            Set Preverence
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        <button name="preverence" class="btn btn-primary" type="submit" id="preverence-btn" value="preverence">
-                            Preverence
-                        </button>
+                        </div>
                     </form>
+                    <!-- <form class="col-12">
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <input type="text" value="preference" name="preverence" style="display:none;">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <label for="location" class="form-label col-2">Location : </label>
+                                            <div class="col-10">
+                                                <select id="location" name="location" class="form-control w-100">
+                                                    <option value="">default</option>
+                                                    @foreach($DataSL as $simple_location)
+                                                        <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button name="preverence" class="btn btn-primary w-100" type="submit" id="preverence-btn" value="preverence">
+                                    Set Preverence
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
                 </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @foreach($data_taman as $dt)
