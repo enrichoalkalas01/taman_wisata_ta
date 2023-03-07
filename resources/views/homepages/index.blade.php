@@ -105,7 +105,7 @@
                                         @endif
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">{{ $data_taman[$i]->simple_location }}</small>
+                                        <small class="text-muted">{{ $data_taman[$i]->simple_location }} - {{ $data_taman[$i]->jarak }} KM</small>
                                             <!-- <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                             <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>

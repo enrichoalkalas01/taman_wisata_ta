@@ -252,7 +252,7 @@
                                             @endif
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <small class="text-muted">{{ $dt->simple_location }}</small>
+                                            <small class="text-muted">{{ $dt->simple_location }} - {{ $dt->jarak }} KM</small>
                                             <small class="text-muted">{{ $dt->created_at }}</small>
                                         </div>
                                     </div>
