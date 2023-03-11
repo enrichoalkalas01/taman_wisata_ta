@@ -109,7 +109,7 @@
                                                     <option value="">default</option>
                                                     <option value="5">sangat bagus</option>
                                                     <option value="4">bagus</option>
-                                                    <!-- <option value="3">normal</option> -->
+                                                    <option value="3">normal</option>
                                                     <option value="2">tidak bagus</option>
                                                     <option value="1">sangat tidak bagus</option>
                                                 </select>
@@ -121,7 +121,7 @@
                                             <label for="location" class="form-label col-1">Location : </label>
                                             <div class="col-11">
                                                 <select id="location" name="location" class="form-control w-100">
-                                                    <option value="">default</option>
+                                                    <option value="{{ $LocationVal }}">default</option>
                                                     @foreach($DataSL as $simple_location)
                                                         <option value="{{ $simple_location->name_location }}">{{ $simple_location->name_location }}</option>
                                                     @endforeach
